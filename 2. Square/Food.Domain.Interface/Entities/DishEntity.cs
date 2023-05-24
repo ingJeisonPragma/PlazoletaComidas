@@ -28,8 +28,8 @@ namespace Food.Domain.Interface.Entities
         [Column(Order = 4)]
         public string Descripcion { get; set; }
 
-        [Column(TypeName = "decimal(8,2)", Order = 5)]
-        public decimal Precio { get; set; }
+        [Column(Order = 5)]
+        public int Precio { get; set; }
 
         [Column(Order = 6)]
         public int IdRestaurant { get; set; }

@@ -39,9 +39,11 @@ namespace Food.DataBase.Repository
             return new List<DishEntity>();
         }
 
-        public async Task<DishEntity> GetById(int id)
+        public async Task<DishEntity> GetById(int IdDish)
         {
-            return await _foodDBContext.Dishes.Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _foodDBContext.Dishes
+                .Include(r => r.Restaurant)
+                .Where(x => x.Id == IdDish && x.Activo == true).FirstOrDefaultAsync();
         }
 
         public async Task<DishEntity> Update(DishEntity dish)
