@@ -24,6 +24,34 @@ namespace Food.Api.Controllers
             this._orderServices = orderServices;
         }
 
+        [HttpGet]
+        [Route("GetOrderPending")]
+        [Authorize(Roles = "3")]
+        public async Task<ActionResult> GetOrderPending(int page = 1, int take = 10)
+        {
+            StandardResponse response = new();
+            try
+            {
+                var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                var infoUser = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadToken(Token);
+
+                int Employee = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
+
+                response = await _orderServices.GetPending(Employee, page, take);
+                return StatusCode(201, response);
+            }
+            catch (DomainValidateException ex)
+            {
+                return StatusCode(400, ex.Standard);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = "Error inesperado al crear Plato: " + ex.Message;
+                return StatusCode(StatusCodes.Status400BadRequest, response);
+            }
+        }
+
         [HttpPost]
         [Route("AddOrder")]
         public async Task<ActionResult> AddOrder([FromBody] OrderDTO orderDTO)

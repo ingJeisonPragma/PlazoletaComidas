@@ -1,4 +1,6 @@
-﻿using Food.Domain.Interface.Entities;
+﻿using Food.DataBase.Paginate;
+using Food.Domain.Business.DTO;
+using Food.Domain.Interface.Entities;
 using Food.Domain.Interface.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,6 +18,15 @@ namespace Food.DataBase.Repository
         public OrderRepository(FoodDBContext foodDBContext)
         {
             this._foodDBContext = foodDBContext;
+        }
+
+        public async Task<PaginatedListDTO<OrderEntity>> GetOrderState(int IdRstaurant, string State, int page, int take)
+        {
+            var orderEntities = await _foodDBContext.Orders
+                //.Include(o => o.restaurant)
+                .Where(o => o.Estado == State && o.IdRestaurante == IdRstaurant)
+                .GetPagedAsync(page, take);
+            return orderEntities;
         }
 
         public async Task<List<OrderEntity>> ValidateOrderCustomer(int IdCustomer)

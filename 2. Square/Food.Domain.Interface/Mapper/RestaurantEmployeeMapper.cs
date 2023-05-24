@@ -10,11 +10,10 @@ namespace Food.Domain.Interface.Mapper
 {
     public class RestaurantEmployeeMapper
     {
-        public static RestaurantEmployeeDTO MapDTO(RestaurantEmployeeEntity dto)
+        public static RestaurantEmployeeDTO? MapDTO(RestaurantEmployeeEntity dto)
         {
-            var model = new RestaurantEmployeeDTO();
             if (dto != null)
-                return model = AttributesDTO(dto);
+                return AttributesDTO(dto);
             return null;
         }
         public static List<RestaurantEmployeeDTO> MapListDTO(List<RestaurantEmployeeEntity> entity)
@@ -26,11 +25,10 @@ namespace Food.Domain.Interface.Mapper
             return restaurants;
         }
 
-        public static RestaurantEmployeeEntity MapEntity(RestaurantEmployeeDTO dto)
+        public static RestaurantEmployeeEntity? MapEntity(RestaurantEmployeeDTO dto)
         {
-            var model = new RestaurantEmployeeEntity();
             if (dto != null)
-                return model = AttributesEntity(dto);
+                return AttributesEntity(dto);
             return null;
         }
         public static List<RestaurantEmployeeEntity> MapListEntity(List<RestaurantEmployeeDTO> entity)
