@@ -65,7 +65,7 @@ namespace Food.Domain.Business.DTO
         /// <summary>
         /// Código de acceso cuando se requiere un token de acceso.
         /// </summary>
-        public bool IsOwn { get; set; }
+        public bool IsPragma { get; set; }
 
         /// <summary>
         /// Indica si el API requiere parametros de Encabezado

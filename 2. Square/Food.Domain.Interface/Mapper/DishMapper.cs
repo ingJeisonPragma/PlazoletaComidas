@@ -10,12 +10,11 @@ namespace Food.Domain.Interface.Mapper
 {
     public static class DishMapper
     {
-        public static DishDTO MapDTO(DishEntity dto)
+        public static DishDTO? MapDTO(DishEntity dto)
         {
-            var model = new DishDTO();
             if (dto != null)
-                model = AttributesDTO(dto);
-            return model;
+                return AttributesDTO(dto);
+            return null;
         }
         public static List<DishDTO> MapListDTO(List<DishEntity> entity)
         {
@@ -26,12 +25,11 @@ namespace Food.Domain.Interface.Mapper
             return Dishs;
         }
 
-        public static DishEntity MapEntity(DishDTO dto)
+        public static DishEntity? MapEntity(DishDTO dto)
         {
-            var model = new DishEntity();
             if (dto != null)
-                model = AttributesEntity(dto);
-            return model;
+                return AttributesEntity(dto);
+            return null;
         }
         public static List<DishEntity> MapListEntity(List<DishDTO> entity)
         {
@@ -59,6 +57,7 @@ namespace Food.Domain.Interface.Mapper
             };
             return dto;
         }
+
         private static DishEntity AttributesEntity(DishDTO dto)
         {
             var Dish = new DishEntity()
@@ -74,5 +73,30 @@ namespace Food.Domain.Interface.Mapper
             };
             return Dish;
         }
+
+        #region Agrupación Categoria y Producto
+        public static List<DishCategoryDTO> MapListCategoryDTO(List<DishEntity> entity)
+        {
+            List<DishCategoryDTO> Dishs = new();
+            if (entity.Count > 0)
+                foreach (DishEntity item in entity)
+                    Dishs.Add(AttributesCategoryDTO(item));
+            return Dishs;
+        }
+
+        private static DishCategoryDTO AttributesCategoryDTO(DishEntity entity)
+        {
+            var dto = new DishCategoryDTO()
+            {
+                Id = entity.Id,
+                Nombre = entity.Nombre,
+                Descripcion = entity.Descripcion,
+                Precio = Convert.ToInt32(entity.Precio),
+                IdRestaurant = entity.IdRestaurant,
+                urlImagen = entity.urlImagen,
+            };
+            return dto;
+        }
+        #endregion
     }
 }

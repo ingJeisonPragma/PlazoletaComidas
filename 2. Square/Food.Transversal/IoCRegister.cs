@@ -38,6 +38,7 @@ namespace Food.Transversal
             services.AddTransient<IDishServices, DishServices>();
             services.AddTransient<IRestaurantEmployeeServices, RestaurantEmployeeServices>();
 
+
             //Api User
             services.AddTransient<IHttpPetitionServices, HttpPetitionServices>();
             services.AddTransient<IUserProxyServices, UserProxyServices>();
@@ -51,7 +52,7 @@ namespace Food.Transversal
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
             services.AddScoped<IDishRepository, DishRepository>();
             services.AddScoped<IRestaurantEmployeeRepository, RestaurantEmployeeRepository>();
-
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
         }
     }
 }

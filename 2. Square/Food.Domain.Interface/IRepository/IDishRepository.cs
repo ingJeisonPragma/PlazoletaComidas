@@ -11,7 +11,7 @@ namespace Food.Domain.Interface.IRepository
     public interface IDishRepository
     {
         Task<DishEntity> GetById(int id);
-        Task<DishEntity> GetAll();
+        Task<List<DishEntity>> GetAll(int IdRestaurant, int page, int take);
         Task<DishEntity> Add(DishEntity dish);
         Task<DishEntity> DeleteById(DishEntity dish);
         Task<DishEntity> Update(DishEntity dish);

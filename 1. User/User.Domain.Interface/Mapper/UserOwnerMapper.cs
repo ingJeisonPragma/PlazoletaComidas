@@ -16,7 +16,10 @@ namespace User.Domain.Interface.Mapper
         {
             var model = new UserOwnerDTO();
             if (dto != null)
+            {
                 model = AttributesDTO(dto);
+                return model;
+            }
             return null;
         }
         public static List<UserOwnerDTO> MapListDTO(List<UserEntity> entity)
