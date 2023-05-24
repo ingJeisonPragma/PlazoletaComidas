@@ -125,7 +125,7 @@ namespace User.Domain.Services.Services
 
             var userDto = UserOwnerMapper.MapDTO(getOwner);
 
-            return new StandardResponse { IsSuccess = true, Message = "El Propietario existe.", Result = userDto };
+            return new StandardResponse { IsSuccess = true, Message = "El Usuario existe.", Result = userDto };
         }
 
         public async Task<UserOwnerDTO> GetValidateCredential(string user, string Pass)

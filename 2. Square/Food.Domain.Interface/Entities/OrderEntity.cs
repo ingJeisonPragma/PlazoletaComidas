@@ -32,9 +32,8 @@ namespace Food.Domain.Interface.Entities
         [Column(Order = 4)]
         public string Estado { get; set; }
 
-        [Required]
         [MaxLength(20)]
-        public int IdChef { get; set; }
+        public int? IdChef { get; set; }
         [ForeignKey("IdChef")]
         public RestaurantEmployeeEntity restaurantEmployee { get; set; }
 
