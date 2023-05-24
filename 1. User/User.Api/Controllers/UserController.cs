@@ -31,7 +31,7 @@ namespace User.Api.Controllers
 
         [HttpGet]
         [Route("GetUser")]
-        [Authorize(Roles = "1")]
+        //[Authorize(Roles = "1")]
         public async Task<ActionResult<StandardResponse>> GetUser(int Id)
         {
             StandardResponse response = new();

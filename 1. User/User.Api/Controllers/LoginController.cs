@@ -24,6 +24,7 @@ namespace User.Api.Controllers
             this._ownerServices = ownerServices;
             this._loginServices = loginServices;
         }
+
         /// <summary>
         /// CreateToken: Metodo que autentica el usuario y genera un token para permitir 
         /// utilizar los otros metodos de las API que requieren autorizacion.

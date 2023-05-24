@@ -63,9 +63,11 @@ namespace Food.Transversal.Proxy
                         Result = null
                     };
 
-                //Si la petición es de integral se mandan los parametros por defecto
+                //Si la petición es de Pragma se mandan los parametros por defecto
+                standard.TypeAuthorize = standard.IsPragma ? "Bearer" : standard.TypeAuthorize;
+                standard.TypeBody = standard.IsPragma ? "json" : standard.TypeBody;
 
-                JObject json = new JObject();
+                JObject json = new();
                 HttpClient client = new();
                 client.DefaultRequestHeaders.Clear();
                 client.BaseAddress = new Uri(standard.URL); //Se envia la URL del API que se va consultar
@@ -166,7 +168,7 @@ namespace Food.Transversal.Proxy
 
                 if (response.IsSuccessStatusCode)
                 {
-                    if (standard.IsOwn)
+                    if (standard.IsPragma)
                     {
                         json = JObject.Parse(result);
                         return JsonConvert.DeserializeObject<StandardResponse>(json.ToString());
@@ -183,7 +185,7 @@ namespace Food.Transversal.Proxy
                     return new StandardResponse
                     {
                         IsSuccess = false,
-                        Message = "No fue posible realizar la consulta.",
+                        Message = "No fue posible realizar la consulta: " + response.ReasonPhrase,
                         Result = result
                     };
             }

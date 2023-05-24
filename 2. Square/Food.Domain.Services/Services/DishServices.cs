@@ -16,38 +16,29 @@ namespace Food.Domain.Services.Services
     public class DishServices : IDishServices
     {
         private readonly IDishRepository _dishRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IUserServices _userServices;
         private readonly IRestaurantServices _restaurantServices;
 
         public DishServices(IDishRepository dishRepository,
+            ICategoryRepository categoryRepository,
             IUserServices userServices,
             IRestaurantServices restaurantServices)
         {
             this._dishRepository = dishRepository;
+            this._categoryRepository = categoryRepository;
             this._userServices = userServices;
             this._restaurantServices = restaurantServices;
         }
-        public async Task<StandardResponse> CreateDish(DishDTO dish)
+        public async Task<StandardResponse> CreateDish(DishDTO dish, int IdPropietario)
         {
             //Validar propietario exista
-            var response = await _userServices.ValidateUserOwner(dish.IdPropietario);
-            if (!response.IsSuccess)
-                throw new DomainValidateException(response);
-            //var ResponseRestaurant = await _restaurantServices.GetByIdRestaurant(dish.IdRestaurant);
-
-            //var restaurant = (RestaurantDTO)ResponseRestaurant.Result;
-
-            ////Validar propietario asociado a restaurante
-            ////Comparar el propietario del restaurante corresponda al enviado.
-            //if (restaurant.IdPropietario != dish.IdPropietario)
-            //{
-            //    response.IsSuccess = false;
-            //    response.Message = "El Propietario no está asignado a este restaurante.";
+            var response = new StandardResponse(); //await _userServices.ValidateUserOwner(IdPropietario);
+            //if (!response.IsSuccess)
             //    throw new DomainValidateException(response);
-            //}
 
             //Validar propietario asociado a restaurante
-            var ResponseRestaurant = await _restaurantServices.GetValidateRestaurantOwner(dish.IdRestaurant, dish.IdPropietario);
+            var ResponseRestaurant = await _restaurantServices.GetValidateRestaurantOwner(dish.IdRestaurant, IdPropietario);
 
             dish.Activo = true;
             var DishEntityData = DishMapper.MapEntity(dish);
@@ -106,6 +97,20 @@ namespace Food.Domain.Services.Services
             response.IsSuccess = true;
             response.Message = "El Plato fue actualizado correctamente.";
             return response;
+
+        }
+
+        public async Task<StandardResponse> GetDishByCategory(int IdRestaurant)
+        {
+            //Validar propietario exista
+            var response = await _categoryRepository.GetAll(IdRestaurant);
+
+            var categories = CategoryMapper.MapListDTO(response);
+
+            if (response.Count > 0)
+                return new StandardResponse { IsSuccess = true, Message = "Lista de Platos por categoria.", Result = categories };
+            else
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "No hay Platos asociados al restaurante." });
 
         }
     }

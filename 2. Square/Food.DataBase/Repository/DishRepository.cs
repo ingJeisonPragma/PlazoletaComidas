@@ -1,4 +1,6 @@
-﻿using Food.Domain.Interface.Entities;
+﻿using Food.DataBase.Paginate;
+using Food.Domain.Business.DTO;
+using Food.Domain.Interface.Entities;
 using Food.Domain.Interface.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,9 +31,12 @@ namespace Food.DataBase.Repository
             throw new NotImplementedException();
         }
 
-        public Task<DishEntity> GetAll()
+        public async Task<List<DishEntity>> GetAll(int IdRestaurant, int page, int take)
         {
-            throw new NotImplementedException();
+            var dato = await _foodDBContext.Dishes.Where(d => d.IdRestaurant == IdRestaurant)
+                .Include(c => c.Category).GroupBy(c => c.Category.Id).ToListAsync();
+            //.GetPagedAsync(page, take);
+            return new List<DishEntity>();
         }
 
         public async Task<DishEntity> GetById(int id)

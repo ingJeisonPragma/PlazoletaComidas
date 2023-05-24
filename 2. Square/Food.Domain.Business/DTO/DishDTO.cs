@@ -28,13 +28,13 @@ namespace Food.Domain.Business.DTO
 
         [Required]
         [Range(1, int.MaxValue)]
-        public int Precio { get; set; }
+        public decimal Precio { get; set; }
 
         [Required(ErrorMessage = "El Id del restaurante es obligatorio.")]
         public int IdRestaurant { get; set; }
 
-        [Required(ErrorMessage = "El requerido el código del propietario.")]
-        public int IdPropietario { get; set; }
+        //[Required(ErrorMessage = "El requerido el código del propietario.")]
+        //public int IdPropietario { get; set; }
 
         [Required(ErrorMessage = "La Url de la imagen en un campo obligatorio.")]
         [MaxLength(1000, ErrorMessage = "La Url excede los 1000 caracteres permitidos.")]

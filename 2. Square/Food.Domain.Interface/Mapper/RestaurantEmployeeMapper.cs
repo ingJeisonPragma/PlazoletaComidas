@@ -14,8 +14,8 @@ namespace Food.Domain.Interface.Mapper
         {
             var model = new RestaurantEmployeeDTO();
             if (dto != null)
-                model = AttributesDTO(dto);
-            return model;
+                return model = AttributesDTO(dto);
+            return null;
         }
         public static List<RestaurantEmployeeDTO> MapListDTO(List<RestaurantEmployeeEntity> entity)
         {
@@ -30,8 +30,8 @@ namespace Food.Domain.Interface.Mapper
         {
             var model = new RestaurantEmployeeEntity();
             if (dto != null)
-                model = AttributesEntity(dto);
-            return model;
+                return model = AttributesEntity(dto);
+            return null;
         }
         public static List<RestaurantEmployeeEntity> MapListEntity(List<RestaurantEmployeeDTO> entity)
         {

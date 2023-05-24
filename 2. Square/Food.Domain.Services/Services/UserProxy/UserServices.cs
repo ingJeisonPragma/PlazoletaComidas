@@ -37,23 +37,5 @@ namespace Food.Domain.Services.Services.UserProxy
 
             return response;
         }
-
-        //Se encarga de validar que el Restaurante pertenezca al IdPropietario
-        public async Task<StandardResponse> ValidateRestaurantOwner(int IdRestaurant, int IdPropietario)
-        {
-            List<dynamic> Header = new() { "Id" };
-            List<dynamic> Value = new() { IdPropietario };
-
-            var response = await _userProxy.GetAsync("/api/User/GetUser", Header, Value);
-
-            if (response.IsSuccess)
-            {
-                var user = JsonConvert.DeserializeObject<UserDTO>(response.Result.ToString());
-                if (user.IdRol != 2)
-                    return new StandardResponse() { IsSuccess = false, Message = "El usuario no tiene el Rol de Propietario." };
-            }
-
-            return response;
-        }
     }
 }

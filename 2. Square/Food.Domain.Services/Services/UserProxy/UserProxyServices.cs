@@ -31,9 +31,9 @@ namespace Food.Domain.Services.Services.UserProxy
                 URL = _configuration["Apis:urlUser"],
                 //ValueBody = request,
                 MethodName = MethodName,
-                IsAuthorize = false,
-                Token = "",
-                IsOwn = true,
+                IsAuthorize = true,
+                Token = _configuration["Tokens:AccessToken"],
+                IsPragma = true,
             };
 
             return await _httpPetition.PetitionStandard(str);
