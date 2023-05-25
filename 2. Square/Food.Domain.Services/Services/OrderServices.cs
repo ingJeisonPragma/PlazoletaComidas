@@ -31,14 +31,14 @@ namespace Food.Domain.Services.Services
 
         public async Task<StandardResponse> GetPending(int IdEmployee, int page, int take)
         {
-            //Validar Los restaurantes asociados al Empleado
+            //Validar el restaurante asociado al Empleado
             var standard = await _restaurantEmployeeServices.GetRestaurantEmployee(IdEmployee);
 
             var restautant = standard.Result.MapTo<RestaurantEmployeeDTO>();
             if (restautant == null)
-                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Eror al mapear el restaurante del empleado." });
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error al mapear el restaurante del empleado." });
 
-            //Buscar los estados pendientes
+            //Buscar los ordenes con estados pendientes
             var orderEntities = await _orderRepository.GetOrderState(restautant.IdRestaurante, "PENDIENTE", page, take);
 
             var orderMap = orderEntities.MapTo<PaginatedListDTO<OrderDTO>>();
