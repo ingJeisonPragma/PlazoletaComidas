@@ -13,5 +13,7 @@ namespace Food.Domain.Interface.IRepository
         Task<List<OrderEntity>> ValidateOrderCustomer(int IdCustomer);
         Task<OrderEntity> AddOrder(OrderEntity order);
         Task<PaginatedListDTO<OrderEntity>> GetOrderState(int IdRstaurant, string State, int page, int take);
+        Task<OrderEntity> GetById(int IdOrder);
+        Task<OrderEntity> UpdateOrder(OrderEntity order);
     }
 }

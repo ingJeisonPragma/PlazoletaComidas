@@ -41,5 +41,18 @@ namespace Food.DataBase.Repository
             var dat = await _foodDBContext.SaveChangesAsync();
             return order;
         }
+
+        public async Task<OrderEntity> GetById(int IdOrder)
+        {
+            var orderEntity = await _foodDBContext.Orders.Where(o => o.Id == IdOrder).FirstOrDefaultAsync();
+            return orderEntity;
+        }
+
+        public async Task<OrderEntity> UpdateOrder(OrderEntity order)
+        {
+            _foodDBContext.Entry(order).State = EntityState.Modified;
+            var dat = await _foodDBContext.SaveChangesAsync();
+            return order;
+        }
     }
 }

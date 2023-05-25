@@ -1,4 +1,5 @@
 ﻿using Food.Domain.Business.DTO;
+using Food.Domain.Business.DTO.Order;
 using Food.Domain.Interface.Exceptions;
 using Food.Domain.Interface.IServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -65,6 +66,34 @@ namespace Food.Api.Controllers
                 orderDTO.IdCliente = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
 
                 response = await _orderServices.CreateOrder(orderDTO);
+                return StatusCode(201, response);
+            }
+            catch (DomainValidateException ex)
+            {
+                return StatusCode(400, ex.Standard);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = "Error inesperado al crear Plato: " + ex.Message;
+                return StatusCode(StatusCodes.Status400BadRequest, response);
+            }
+        }
+
+        [HttpPut]
+        [Route("AssingOrderEmployee")]
+        [Authorize(Roles = "3")]
+        public async Task<ActionResult> AssingOrderEmployee([FromBody] List<UpdateOrderDTO> updateOrders)
+        {
+            StandardResponse response = new();
+            try
+            {
+                var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                var infoUser = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadToken(Token);
+
+                int IdEmployee = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
+
+                response = await _orderServices.UpdateOrder(updateOrders, IdEmployee);
                 return StatusCode(201, response);
             }
             catch (DomainValidateException ex)

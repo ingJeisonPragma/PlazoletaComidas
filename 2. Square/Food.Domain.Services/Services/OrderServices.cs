@@ -1,4 +1,5 @@
 ﻿using Food.Domain.Business.DTO;
+using Food.Domain.Business.DTO.Order;
 using Food.Domain.Interface.Entities;
 using Food.Domain.Interface.Exceptions;
 using Food.Domain.Interface.IRepository;
@@ -86,6 +87,39 @@ namespace Food.Domain.Services.Services
             }
 
             return new StandardResponse { IsSuccess = true, Message = "Pedido creado exitosamente.", Result = resultEntity.Id };
+        }
+
+        public async Task<StandardResponse> UpdateOrder(List<UpdateOrderDTO> orders, int IdEmployee)
+        {
+            foreach (var item in orders)
+            {
+                //Buscar información de la Orden
+                var order = await _orderRepository.GetById(item.IdPedido);
+                if (order == null)
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} no existe." });
+                if (order.Estado != "PENDIENTE")
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} ya no se encuentra en estado PENDIENTE." });
+
+                //Validar el restaurante asociado al Empleado
+                var standard = await _restaurantEmployeeServices.GetRestaurantEmployee(IdEmployee);
+
+                var restautant = standard.Result.MapTo<RestaurantEmployeeDTO>();
+                if (restautant == null)
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error al mapear el restaurante del empleado." });
+
+                //Validar que el restaurante del pedido sea el mismo del restaurante del empleado
+                if (restautant.IdRestaurante != order.IdRestaurante)
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} no pertenece al Restaurante del Empleado {IdEmployee}." });
+
+                //Asignar estado EN_PREPARACION y empleado al pedido
+                order.Estado = "EN_PREPARACION";
+                order.IdChef = IdEmployee;
+
+                var resultEntity = await _orderRepository.UpdateOrder(order);
+
+            }
+
+            return new StandardResponse { IsSuccess = true, Message = "Asignaciones de pedido exitosa." };
         }
     }
 }

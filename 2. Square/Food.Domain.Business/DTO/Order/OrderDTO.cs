@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Food.Domain.Business.DTO.OrderDish;
 
-namespace Food.Domain.Business.DTO
+namespace Food.Domain.Business.DTO.Order
 {
     public class OrderDTO
     {
+        [Required]
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "El Id del cliente es obligatorio.")]
         [Display(Name = "IdCliente")]
         [Column(Order = 2)]
