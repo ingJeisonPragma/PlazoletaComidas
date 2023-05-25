@@ -26,6 +26,26 @@ namespace Food.Domain.Services.Services
             this._orderDishRepository = orderDishRepository;
         }
 
+        public async Task<StandardResponse> GetPending(int IdEmployee, int page, int take)
+        {
+            //Validar el restaurante asociado al Empleado
+            var standard = await _restaurantEmployeeServices.GetRestaurantEmployee(IdEmployee);
+
+            var restautant = standard.Result.MapTo<RestaurantEmployeeDTO>();
+            if (restautant == null)
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error al mapear el restaurante del empleado." });
+
+            //Buscar los ordenes con estados pendientes
+            var orderEntities = await _orderRepository.GetOrderState(restautant.IdRestaurante, "PENDIENTE", page, take);
+
+            var orderMap = orderEntities.MapTo<PaginatedListDTO<OrderDTO>>();
+
+            if (orderMap.Total > 0)
+                return new StandardResponse { IsSuccess = true, Message = "Lista de pedidos en estado Pendientes.", Result = orderMap };
+            else
+                return new StandardResponse { IsSuccess = false, Message = "No se tienen pedidos Pendientes en el restaurante." };
+        }
+
         public async Task<StandardResponse> CreateOrder(OrderDTO order)
         {
             //Validar que el cliente no tenga más de un pedido creado en Estado (PENDIENTE, EN_PREPARACION, LISTO)
