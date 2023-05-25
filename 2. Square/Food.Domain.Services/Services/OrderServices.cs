@@ -17,13 +17,36 @@ namespace Food.Domain.Services.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IDishRepository _dishRepository;
         private readonly IOrderDishRepository _orderDishRepository;
+        private readonly IRestaurantEmployeeServices _restaurantEmployeeServices;
 
         public OrderServices(IOrderRepository orderRepository,
-            IDishRepository dishRepository, IOrderDishRepository orderDishRepository)
+            IDishRepository dishRepository, IOrderDishRepository orderDishRepository,
+            IRestaurantEmployeeServices restaurantEmployeeServices)
         {
             this._orderRepository = orderRepository;
             this._dishRepository = dishRepository;
             this._orderDishRepository = orderDishRepository;
+            this._restaurantEmployeeServices = restaurantEmployeeServices;
+        }
+
+        public async Task<StandardResponse> GetPending(int IdEmployee, int page, int take)
+        {
+            //Validar el restaurante asociado al Empleado
+            var standard = await _restaurantEmployeeServices.GetRestaurantEmployee(IdEmployee);
+
+            var restautant = standard.Result.MapTo<RestaurantEmployeeDTO>();
+            if (restautant == null)
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error al mapear el restaurante del empleado." });
+
+            //Buscar los ordenes con estados pendientes
+            var orderEntities = await _orderRepository.GetOrderState(restautant.IdRestaurante, "PENDIENTE", page, take);
+
+            var orderMap = orderEntities.MapTo<PaginatedListDTO<OrderDTO>>();
+
+            if (orderMap.Total > 0)
+                return new StandardResponse { IsSuccess = true, Message = "Lista de pedidos en estado Pendientes.", Result = orderMap };
+            else
+                return new StandardResponse { IsSuccess = false, Message = "No se tienen pedidos Pendientes en el restaurante." };
         }
 
         public async Task<StandardResponse> GetPending(int IdEmployee, int page, int take)
@@ -82,7 +105,7 @@ namespace Food.Domain.Services.Services
                 var resul = await _orderDishRepository.AddOrderDish(orderDishEntity);
             }
 
-            return new StandardResponse { IsSuccess = false, Message = "Pedido creado exitosamente.", Result = resultEntity.Id };
+            return new StandardResponse { IsSuccess = true, Message = "Pedido creado exitosamente.", Result = resultEntity.Id };
         }
     }
 }

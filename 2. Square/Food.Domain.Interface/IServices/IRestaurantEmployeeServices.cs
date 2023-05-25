@@ -10,5 +10,6 @@ namespace Food.Domain.Interface.IServices
     public interface IRestaurantEmployeeServices
     {
         Task<StandardResponse> CreateRestauranteEmpl(RestaurantEmployeeDTO restaurantEmployee);
+        Task<StandardResponse> GetRestaurantEmployee(int IdEmployee);
     }
 }

@@ -29,5 +29,18 @@ namespace Food.Domain.Services.Services
             else
                 throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error creando la realación Restaurante y Empleado." });
         }
+
+        public async Task<StandardResponse> GetRestaurantEmployee(int IdEmployee)
+        {
+            //Buscar los restaurantes del Empleado
+            var result = await _employeeRepository.GetRestaurantByEmployee(IdEmployee);
+
+            var restaurantDto = RestaurantEmployeeMapper.MapDTO(result);
+
+            if (restaurantDto != null)
+                return new StandardResponse { IsSuccess = true, Message = "Restaurante por empleado.", Result = restaurantDto };
+            else
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "No se encontraron restaurantes asociados al empleado." });
+        }
     }
 }

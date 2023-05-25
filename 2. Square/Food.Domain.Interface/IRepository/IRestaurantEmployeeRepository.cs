@@ -15,5 +15,6 @@ namespace Food.Domain.Interface.IRepository
         Task<RestaurantEmployeeEntity> Add(RestaurantEmployeeEntity restaurant);
         Task<RestaurantEmployeeEntity> DeleteById(RestaurantEmployeeEntity restaurant);
         Task<RestaurantEmployeeEntity> UpdateById(RestaurantEmployeeEntity restaurant);
+        Task<RestaurantEmployeeEntity> GetRestaurantByEmployee(int idEmployee);
     }
 }

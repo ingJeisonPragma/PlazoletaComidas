@@ -1,4 +1,5 @@
-﻿using Food.Domain.Interface.Entities;
+﻿using Food.Domain.Business.DTO;
+using Food.Domain.Interface.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Food.Domain.Interface.IRepository
     {
         Task<List<OrderEntity>> ValidateOrderCustomer(int IdCustomer);
         Task<OrderEntity> AddOrder(OrderEntity order);
+        Task<PaginatedListDTO<OrderEntity>> GetOrderState(int IdRstaurant, string State, int page, int take);
     }
 }

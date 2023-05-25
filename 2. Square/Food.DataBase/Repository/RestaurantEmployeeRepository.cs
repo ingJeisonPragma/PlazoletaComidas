@@ -40,6 +40,11 @@ namespace Food.DataBase.Repository
             return await _foodDBContext.RestaurantEmployees.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<RestaurantEmployeeEntity> GetRestaurantByEmployee(int idEmployee)
+        {
+            return await _foodDBContext.RestaurantEmployees.Where(x => x.IdPersona == idEmployee).FirstOrDefaultAsync();
+        }
+
         public Task<RestaurantEmployeeEntity> UpdateById(RestaurantEmployeeEntity restaurant)
         {
             throw new NotImplementedException();
