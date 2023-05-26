@@ -1,5 +1,6 @@
 ﻿using Food.Domain.Business.DTO;
 using Food.Domain.Business.DTO.Order;
+using Food.Domain.Business.DTO.OrderDish;
 using Food.Domain.Interface.Entities;
 using Food.Domain.Interface.Exceptions;
 using Food.Domain.Interface.IRepository;
@@ -42,8 +43,20 @@ namespace Food.Domain.Services.Services
             //Buscar los ordenes con estados pendientes
             var orderEntities = await _orderRepository.GetOrderState(restautant.IdRestaurante, "PENDIENTE", page, take);
 
-            var orderMap = orderEntities.MapTo<PaginatedListDTO<OrderDTO>>();
-
+            var orderMap = orderEntities.MapTo<PaginatedListDTO<QueryOrderDTO>>();
+            
+            //Cargar los platos a realizar
+            foreach (var item in orderMap.Items)
+            {
+                var orderdish = await _orderDishRepository.GetOrderDish(item.Id);
+                item.Dishes = new();
+                foreach (var itemDish in orderdish)
+                {
+                    var Dish = await _dishRepository.GetById(Convert.ToInt32(itemDish.IdPlato));
+                    item.Dishes.Add(DishMapper.MapDTO(Dish));
+                }
+            }
+            
             if (orderMap.Total > 0)
                 return new StandardResponse { IsSuccess = true, Message = "Lista de pedidos en estado Pendientes.", Result = orderMap };
             else
@@ -113,7 +126,7 @@ namespace Food.Domain.Services.Services
 
                 //Asignar estado EN_PREPARACION y empleado al pedido
                 order.Estado = "EN_PREPARACION";
-                order.IdChef = IdEmployee;
+                order.IdChef = restautant.Id;
 
                 var resultEntity = await _orderRepository.UpdateOrder(order);
 

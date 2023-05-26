@@ -20,7 +20,9 @@ namespace Food.DataBase.Repository
 
         public async Task<List<OrderDishEntity>> GetOrderDish(int IdOrder)
         {
-            var orderEntities = await _foodDBContext.OrderDishes.Where(o => o.IdPedido == IdOrder).ToListAsync();
+            var orderEntities = await _foodDBContext.OrderDishes
+                .Include(od => od.Dish)
+                .Where(o => o.IdPedido == IdOrder).ToListAsync();
             return orderEntities;
         }
 
