@@ -5,12 +5,15 @@ using Food.Domain.Interface.Entities;
 using Food.Domain.Interface.Exceptions;
 using Food.Domain.Interface.IRepository;
 using Food.Domain.Interface.IServices;
+using Food.Domain.Interface.IServices.ITwilioProxy;
 using Food.Domain.Interface.Mapper;
+using Food.Domain.Services.Services.TwilioProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Twilio.Clients;
 
 namespace Food.Domain.Services.Services
 {
@@ -20,15 +23,18 @@ namespace Food.Domain.Services.Services
         private readonly IDishRepository _dishRepository;
         private readonly IOrderDishRepository _orderDishRepository;
         private readonly IRestaurantEmployeeServices _restaurantEmployeeServices;
+        private readonly ITwilioServices _twilioServices;
 
         public OrderServices(IOrderRepository orderRepository,
             IDishRepository dishRepository, IOrderDishRepository orderDishRepository,
-            IRestaurantEmployeeServices restaurantEmployeeServices)
+            IRestaurantEmployeeServices restaurantEmployeeServices,
+            ITwilioServices twilioServices)
         {
             this._orderRepository = orderRepository;
             this._dishRepository = dishRepository;
             this._orderDishRepository = orderDishRepository;
             this._restaurantEmployeeServices = restaurantEmployeeServices;
+            this._twilioServices = twilioServices;
         }
 
         public async Task<StandardResponse> GetPending(int IdEmployee, int page, int take)
@@ -126,6 +132,43 @@ namespace Food.Domain.Services.Services
 
                 //Asignar estado EN_PREPARACION y empleado al pedido
                 order.Estado = "EN_PREPARACION";
+                order.IdChef = restautant.Id;
+
+                var resultEntity = await _orderRepository.UpdateOrder(order);
+
+            }
+
+            return new StandardResponse { IsSuccess = true, Message = "Asignaciones de pedido exitosa." };
+        }
+
+        public async Task<StandardResponse> UpdateOrderOK(List<UpdateOrderDTO> orders, int IdEmployee)
+        {
+            foreach (var item in orders)
+            {
+                //Buscar información de la Orden
+                var order = await _orderRepository.GetById(item.IdPedido);
+                if (order == null)
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} no existe." });
+                if (order.Estado != "EN_PREPARACION")
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} no se encuentra en estado EN_PREPARACION." });
+
+                //Validar el restaurante asociado al Empleado
+                var standard = await _restaurantEmployeeServices.GetRestaurantEmployee(IdEmployee);
+
+                var restautant = standard.Result.MapTo<RestaurantEmployeeDTO>();
+                if (restautant == null)
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error al mapear el restaurante del empleado." });
+
+                //Validar que el restaurante del pedido sea el mismo del restaurante del empleado
+                if (restautant.IdRestaurante != order.IdRestaurante)
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} no pertenece al Restaurante del Empleado {IdEmployee}." });
+
+                //Enviar SMS al usuario
+                var messa = await _twilioServices.SendSMS("", "");
+
+
+                //Asignar estado LISTO y empleado al pedido
+                order.Estado = "LISTO";
                 order.IdChef = restautant.Id;
 
                 var resultEntity = await _orderRepository.UpdateOrder(order);

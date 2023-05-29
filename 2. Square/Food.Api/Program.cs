@@ -1,8 +1,10 @@
+using Food.Domain.Services.Services.TwilioProxy;
 using Food.Transversal;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Twilio.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 IoCRegister.AddRegistration(builder.Services, builder.Configuration.GetConnectionString("cnxFood"));
+
+builder.Services.AddHttpClient<ITwilioRestClient, TwilioServices>();
 
 //Inyeccion de dependencias del token JWT.
 builder.Services.AddAuthentication(options =>
