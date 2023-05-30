@@ -48,6 +48,6 @@ namespace User.Domain.Business.DTO
         //public string Clave { get; set; }
 
         //public int IdRol { get; set; }
-        public string NombreRol { get; set; }
+        public string? NombreRol { get; set; }
     }
 }
