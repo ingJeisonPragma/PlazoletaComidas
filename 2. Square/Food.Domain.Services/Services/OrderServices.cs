@@ -137,7 +137,7 @@ namespace Food.Domain.Services.Services
                 order.Estado = "EN_PREPARACION";
                 order.IdChef = restautant.Id;
 
-                var resultEntity = await _orderRepository.UpdateOrder(order);
+                await _orderRepository.UpdateOrder(order);
 
             }
 
@@ -177,16 +177,15 @@ namespace Food.Domain.Services.Services
                 //Enviar SMS al usuario
                 await _twilioServices.SendSMS(user.Celular, msg);
 
-
-                //Asignar estado LISTO y empleado al pedido
+                //Asignar estado LISTO y Pin de validación del pedido
                 order.Estado = "LISTO";
-                order.IdChef = restautant.Id;
+                order.Pin = Pin;
 
-                var resultEntity = await _orderRepository.UpdateOrder(order);
+                await _orderRepository.UpdateOrder(order);
 
             }
 
-            return new StandardResponse { IsSuccess = true, Message = "Asignaciones de pedido exitosa." };
+            return new StandardResponse { IsSuccess = true, Message = "Notificación del pedido al cliente exitosa." };
         }
 
         public async Task<StandardResponse> UpdateDeliveryOrder(int IdEmployee, int Order, string Pin)
@@ -213,7 +212,7 @@ namespace Food.Domain.Services.Services
             if (order.Pin != Pin)
                 throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El PIN no coincide, favor validar nuevamente." });
 
-            //Asignar estado ENTREGADO y empleado al pedido
+            //Asignar estado ENTREGADO
             order.Estado = "ENTREGADO";
 
             var resultEntity = await _orderRepository.UpdateOrder(order);
@@ -240,9 +239,9 @@ namespace Food.Domain.Services.Services
             if (order.Estado != "PENDIENTE")
                 throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"Lo sentimos, tu pedido ya está en preparación y no puede cancelarse." });
 
-            //Asignar estado ENTREGADO y empleado al pedido
+            //Asignar estado ENTREGADO
             order.Estado = "CANCELADO";
-            var resultEntity = await _orderRepository.UpdateOrder(order);
+            await _orderRepository.UpdateOrder(order);
 
 
             return new StandardResponse { IsSuccess = true, Message = $"Pedido {Order} fue Cancelado." };
