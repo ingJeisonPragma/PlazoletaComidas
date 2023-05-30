@@ -19,10 +19,13 @@ namespace Food.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderServices _orderServices;
+        private readonly IConfiguration _configuration;
 
-        public OrderController(IOrderServices orderServices)
+        public OrderController(IOrderServices orderServices,
+            IConfiguration configuration)
         {
             this._orderServices = orderServices;
+            this._configuration = configuration;
         }
 
         [HttpGet]
@@ -146,6 +149,7 @@ namespace Food.Api.Controllers
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 var infoUser = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadToken(Token);
+                _configuration["Tokens:AccessToken"] = Token;
 
                 int IdEmployee = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
 

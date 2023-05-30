@@ -28,8 +28,8 @@ namespace User.Domain.Business.DTO
         public string Apellido { get; set; }
 
         [Required(ErrorMessage = "El Celular es un campo obligatorio.")]
-        [MinLength(10, ErrorMessage = "La cantidad minima de caracteres del celular es 10.")]
-        [MaxLength(13, ErrorMessage = "El Celular excede los 13 caracteres permitidos.")]
+        [MinLength(13, ErrorMessage = "La cantidad minima de caracteres del {0} es {1}.")]
+        [MaxLength(13, ErrorMessage = "El {0} excede los {1} caracteres permitidos.")]
         [Display(Name = "Celular")]
         [RegularExpression("^[+-]?\\d+(\\.\\d+)?$", ErrorMessage = "Ingresar un número de Celular válido.")]
         public string Celular { get; set; }

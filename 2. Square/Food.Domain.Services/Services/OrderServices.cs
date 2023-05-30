@@ -6,6 +6,7 @@ using Food.Domain.Interface.Exceptions;
 using Food.Domain.Interface.IRepository;
 using Food.Domain.Interface.IServices;
 using Food.Domain.Interface.IServices.ITwilioProxy;
+using Food.Domain.Interface.IServices.IUserProxy;
 using Food.Domain.Interface.Mapper;
 using Food.Domain.Services.Services.TwilioProxy;
 using System;
@@ -24,17 +25,19 @@ namespace Food.Domain.Services.Services
         private readonly IOrderDishRepository _orderDishRepository;
         private readonly IRestaurantEmployeeServices _restaurantEmployeeServices;
         private readonly ITwilioServices _twilioServices;
+        private readonly IUserServices _userServices;
 
         public OrderServices(IOrderRepository orderRepository,
             IDishRepository dishRepository, IOrderDishRepository orderDishRepository,
             IRestaurantEmployeeServices restaurantEmployeeServices,
-            ITwilioServices twilioServices)
+            ITwilioServices twilioServices, IUserServices userServices)
         {
             this._orderRepository = orderRepository;
             this._dishRepository = dishRepository;
             this._orderDishRepository = orderDishRepository;
             this._restaurantEmployeeServices = restaurantEmployeeServices;
             this._twilioServices = twilioServices;
+            this._userServices = userServices;
         }
 
         public async Task<StandardResponse> GetPending(int IdEmployee, int page, int take)
@@ -163,8 +166,16 @@ namespace Food.Domain.Services.Services
                 if (restautant.IdRestaurante != order.IdRestaurante)
                     throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} no pertenece al Restaurante del Empleado {IdEmployee}." });
 
+                string Pin = new Random().Next(0, 1000000).ToString("D6");
+                string msg = $"El código de verificación del pedido {order.Id} es el {Pin}";
+
+                //Obtener el número de celular del cliente
+                var user = await _userServices.ValidateUserCustomer(order.IdCliente);
+                if (user == null)
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error buscando los datos del cliente." });
+
                 //Enviar SMS al usuario
-                var messa = await _twilioServices.SendSMS("", "");
+                await _twilioServices.SendSMS(user.Celular, msg);
 
 
                 //Asignar estado LISTO y empleado al pedido

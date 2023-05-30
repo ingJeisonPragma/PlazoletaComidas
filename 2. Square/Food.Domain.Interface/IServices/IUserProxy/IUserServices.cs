@@ -1,4 +1,5 @@
 ﻿using Food.Domain.Business.DTO;
+using Food.Domain.Business.UserProxyDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Food.Domain.Interface.IServices.IUserProxy
     public interface IUserServices
     {
         Task<StandardResponse> ValidateUserOwner(int IdPropietario);
+        Task<UserDTO?> ValidateUserCustomer(int IdCustomer);
     }
 }

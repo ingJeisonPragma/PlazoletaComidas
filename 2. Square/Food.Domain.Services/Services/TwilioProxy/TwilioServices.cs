@@ -17,21 +17,11 @@ namespace Food.Domain.Services.Services.TwilioProxy
     public class TwilioServices : ITwilioRestClient, ITwilioServices
     {
         private readonly IConfiguration _configuration;
-        private readonly ITwilioRestClient _client;
         private readonly ITwilioRestClient _innerClient;
 
-        public TwilioServices(IConfiguration configuration, System.Net.Http.HttpClient httpClient)
+        public TwilioServices(IConfiguration configuration)
         {
             this._configuration = configuration;
-
-            httpClient.DefaultRequestHeaders.Add("X-Custom-Header", "CustomTwilioRestClient-Demo");
-
-            _innerClient = new TwilioRestClient(
-                _configuration["Twilio:AccountSID"],
-                _configuration["Twilio:AuthToken"],
-                httpClient: new SystemNetHttpClient(httpClient));
-
-            //this._client = client;
         }
 
         public Response Request(Request request) => _innerClient.Request(request);
@@ -44,14 +34,11 @@ namespace Food.Domain.Services.Services.TwilioProxy
         {
             TwilioClient.Init(_configuration["Twilio:AccountSID"], _configuration["Twilio:AuthToken"]);
             var message = await MessageResource.CreateAsync(
-                to: new Twilio.Types.PhoneNumber("+573126960190"),
-                from: new Twilio.Types.PhoneNumber("+573137653881"),
-                body: $"Su código de validación de pedido {123456}" + msg,
-                client: _client
+                to: new Twilio.Types.PhoneNumber(To),
+                from: new Twilio.Types.PhoneNumber("+13612648733"),
+                body: msg
                 );
 
-
-            var de = message.Sid;
             return true;
         }
     }
