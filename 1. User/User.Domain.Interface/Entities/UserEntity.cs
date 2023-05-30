@@ -47,7 +47,7 @@ namespace User.Domain.Interface.Entities
         public string Correo { get; set; }
 
         [Required]
-        [MaxLength(30)]
+        [MaxLength(500)]
         [Display(Name = "Clave")]
         [Column(Order = 7)]
         public string Clave { get; set; }

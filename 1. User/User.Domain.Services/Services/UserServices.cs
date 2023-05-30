@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BCrypt.Net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace User.Domain.Services.Services
 
             user.IdRol = 2;
             var userEntity = UserOwnerMapper.MapEntity(user);
+            userEntity.Clave = Encript(userEntity.Clave);
             var result = await _userRepository.Add(userEntity);
 
             if (result != null)
@@ -74,6 +76,7 @@ namespace User.Domain.Services.Services
             //Mappear y guardar el Empleado
             var userEntity = UserEmployeeMapper.MapEntity(user);
             userEntity.IdRol = 3;
+            userEntity.Clave = Encript(userEntity.Clave);
             var result = await _userRepository.Add(userEntity);
 
             //Agregar restaurante y Empleado    
@@ -81,7 +84,7 @@ namespace User.Domain.Services.Services
 
             if (!resultAddRestaurant.IsSuccess)
             {
-                result = await _userRepository.Delete(result);
+                await _userRepository.Delete(result);
                 throw new DomainUserValidateException(new StandardResponse
                 {
                     IsSuccess = false,
@@ -108,6 +111,7 @@ namespace User.Domain.Services.Services
 
             user.IdRol = 4;
             var userEntity = UserCustomerMapper.MapEntity(user);
+            userEntity.Clave = Encript(userEntity.Clave);
             var result = await _userRepository.Add(userEntity);
 
             if (result != null)
@@ -134,15 +138,27 @@ namespace User.Domain.Services.Services
 
             if (getUser != null)
             {
-                if (Pass != getUser.Clave)
+                if (DesEncript(Pass, getUser.Clave))
                     throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Usuario o contraseña incorrectos." });
             }
             else
-                throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Usuario no existe, solicitar la creación de cuenta." });
+                throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Usuario o contraseña incorrectos." });
 
             var userDto = UserOwnerMapper.MapDTO(getUser);
 
             return userDto;
+        }
+
+        private static string Encript(string Pass)
+        {
+            string PassWord = BCrypt.Net.BCrypt.EnhancedHashPassword(Pass, HashType.SHA512);
+            return PassWord;
+        }
+
+        private static bool DesEncript(string PasswordLogin, string PasswordBD)
+        {
+            bool Validate = BCrypt.Net.BCrypt.EnhancedVerify(PasswordLogin, PasswordBD, HashType.SHA512);
+            return Validate;
         }
     }
 }
