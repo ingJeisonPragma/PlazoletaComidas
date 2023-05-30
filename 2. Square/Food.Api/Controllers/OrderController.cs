@@ -93,7 +93,7 @@ namespace Food.Api.Controllers
 
                 int IdEmployee = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
 
-                response = await _orderServices.UpdateOrder(updateOrders, IdEmployee);
+                response = await _orderServices.UpdatePreparationOrder(updateOrders, IdEmployee);
                 return StatusCode(201, response);
             }
             catch (DomainValidateException ex)
@@ -122,6 +122,34 @@ namespace Food.Api.Controllers
                 int IdEmployee = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
 
                 response = await _orderServices.UpdateDeliveryOrder(IdEmployee, Order, Pin);
+                return StatusCode(201, response);
+            }
+            catch (DomainValidateException ex)
+            {
+                return StatusCode(400, ex.Standard);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = "Error inesperado al crear Plato: " + ex.Message;
+                return StatusCode(StatusCodes.Status400BadRequest, response);
+            }
+        }
+
+        [HttpPut]
+        [Route("CancelOrder")]
+        [Authorize(Roles = "4")]
+        public async Task<ActionResult> CancelOrder(int Order)
+        {
+            StandardResponse response = new();
+            try
+            {
+                var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                var infoUser = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadToken(Token);
+
+                int IdCustomer = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
+
+                response = await _orderServices.UpdateCancelOrder(IdCustomer, Order);
                 return StatusCode(201, response);
             }
             catch (DomainValidateException ex)

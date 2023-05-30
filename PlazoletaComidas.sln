@@ -25,29 +25,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.DataBase", "1. User\Us
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Domain.Services", "1. User\User.Domain.Services\User.Domain.Services.csproj", "{B7B03AEF-535E-48DD-9000-E93E6E8BE7DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.Domain.Interface", "1. User\User.Domain.Interface\User.Domain.Interface.csproj", "{86A7530F-5B63-42A2-A99C-94F4B4B1BFBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Domain.Interface", "1. User\User.Domain.Interface\User.Domain.Interface.csproj", "{86A7530F-5B63-42A2-A99C-94F4B4B1BFBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.Domain.Business", "1. User\UserDomain.Business\User.Domain.Business.csproj", "{A76E9579-4E6D-46F0-B00D-E991A7616989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Domain.Business", "1. User\UserDomain.Business\User.Domain.Business.csproj", "{A76E9579-4E6D-46F0-B00D-E991A7616989}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04. Transversal", "04. Transversal", "{66D21E0B-FEFB-4739-9129-C3D41325FE97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.Transversal", "1. User\User.Transversal\User.Transversal.csproj", "{800EB9EB-B196-4BA1-8A3C-516053CADED6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Transversal", "1. User\User.Transversal\User.Transversal.csproj", "{800EB9EB-B196-4BA1-8A3C-516053CADED6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.Api", "1. User\User.Api\User.Api.csproj", "{628F4457-2E65-424D-BE9D-8ED2FBBEE447}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Api", "1. User\User.Api\User.Api.csproj", "{628F4457-2E65-424D-BE9D-8ED2FBBEE447}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04. Transversal", "04. Transversal", "{95962C67-1FE1-410A-93BC-818ABE1B9071}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Food.Transversal", "2. Square\Food.Transversal\Food.Transversal.csproj", "{FA84E8B3-73FB-4947-AB96-EE9E6BCCFCB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Food.Transversal", "2. Square\Food.Transversal\Food.Transversal.csproj", "{FA84E8B3-73FB-4947-AB96-EE9E6BCCFCB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Food.DataBase", "2. Square\Food.DataBase\Food.DataBase.csproj", "{26C5C18F-72C0-4FBF-882F-BCD8DBBF408A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Food.DataBase", "2. Square\Food.DataBase\Food.DataBase.csproj", "{26C5C18F-72C0-4FBF-882F-BCD8DBBF408A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Food.Domain.Business", "2. Square\Food.Domain.Business\Food.Domain.Business.csproj", "{2912C94D-D1CC-470C-ABCA-4BB1C2B08F22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Food.Domain.Business", "2. Square\Food.Domain.Business\Food.Domain.Business.csproj", "{2912C94D-D1CC-470C-ABCA-4BB1C2B08F22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Food.Domain.Interface", "2. Square\Food.Domain.Interface\Food.Domain.Interface.csproj", "{1547673B-3650-4556-90FF-9721F0011D43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Food.Domain.Interface", "2. Square\Food.Domain.Interface\Food.Domain.Interface.csproj", "{1547673B-3650-4556-90FF-9721F0011D43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Food.Domain.Services", "2. Square\Food.Domain.Services\Food.Domain.Services.csproj", "{E48F89CF-7294-461A-8B51-DC3B311E19B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Food.Domain.Services", "2. Square\Food.Domain.Services\Food.Domain.Services.csproj", "{E48F89CF-7294-461A-8B51-DC3B311E19B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Food.Api", "2. Square\Food.Api\Food.Api.csproj", "{25FF8687-CAF5-4207-8470-93EC71F53B62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Food.Api", "2. Square\Food.Api\Food.Api.csproj", "{25FF8687-CAF5-4207-8470-93EC71F53B62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
