@@ -41,6 +41,10 @@ namespace Food.Domain.Interface.Entities
         [ForeignKey("IdRestaurante")]
         public RestaurantEntity restaurant { get; set; }
 
+        [MaxLength(10)]
+        [Display(Name = "Pin")]
+        public string? Pin { get; set; }
+
         public virtual List<OrderDishEntity>? OrderDishes { get; set; }
     }
 }
