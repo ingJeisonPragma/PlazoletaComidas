@@ -42,7 +42,7 @@ namespace User.Domain.Business.DTO
         public string Correo { get; set; }
 
         [Required(ErrorMessage = "La Clave es un campo obligatorio.")]
-        [MaxLength(30)]
+        [MaxLength(20)]
         [Display(Name = "Clave")]
         public string Clave { get; set; }
 

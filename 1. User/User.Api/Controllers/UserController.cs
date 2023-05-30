@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using User.Domain.Business.DTO;
 using User.Domain.Business.DTO.FoodProxyDTO;
@@ -83,6 +84,9 @@ namespace User.Api.Controllers
             StandardResponse response = new();
             try
             {
+                var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                _configuration["Tokens:AccessToken"] = Token;
+
                 response = await _ownerServices.CreateEmployee(user);
                 return StatusCode(201, response);
             }
