@@ -44,7 +44,7 @@ namespace Food.Domain.Services.Services
             var orderEntities = await _orderRepository.GetOrderState(restautant.IdRestaurante, "PENDIENTE", page, take);
 
             var orderMap = orderEntities.MapTo<PaginatedListDTO<QueryOrderDTO>>();
-            
+
             //Cargar los platos a realizar
             foreach (var item in orderMap.Items)
             {
@@ -56,7 +56,7 @@ namespace Food.Domain.Services.Services
                     item.Dishes.Add(DishMapper.MapDTO(Dish));
                 }
             }
-            
+
             if (orderMap.Total > 0)
                 return new StandardResponse { IsSuccess = true, Message = "Lista de pedidos en estado Pendientes.", Result = orderMap };
             else
@@ -111,7 +111,7 @@ namespace Food.Domain.Services.Services
                 if (order == null)
                     throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} no existe." });
                 if (order.Estado != "PENDIENTE")
-                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} ya no se encuentra en estado PENDIENTE." });
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {item.IdPedido} ya no se encuentra PENDIENTE." });
 
                 //Validar el restaurante asociado al Empleado
                 var standard = await _restaurantEmployeeServices.GetRestaurantEmployee(IdEmployee);
@@ -133,6 +133,38 @@ namespace Food.Domain.Services.Services
             }
 
             return new StandardResponse { IsSuccess = true, Message = "Asignaciones de pedido exitosa." };
+        }
+
+        public async Task<StandardResponse> UpdateDeliveryOrder(int IdEmployee, int Order, string Pin)
+        {
+            //Buscar información de la Orden
+            var order = await _orderRepository.GetById(Order);
+            if (order == null)
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {Order} no existe." });
+            if (order.Estado != "LISTO")
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {Order} no se encuentra LISTO." });
+
+            //Validar el restaurante asociado al Empleado
+            var standard = await _restaurantEmployeeServices.GetRestaurantEmployee(IdEmployee);
+
+            var restautant = standard.Result.MapTo<RestaurantEmployeeDTO>();
+            if (restautant == null)
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error al mapear el restaurante del empleado." });
+
+            //Validar que el restaurante del pedido sea el mismo del restaurante del empleado
+            if (restautant.IdRestaurante != order.IdRestaurante)
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El pedido {Order} no pertenece al Restaurante del Empleado {IdEmployee}." });
+
+            //Validar el pin de seguridad
+            if (order.Pin != Pin)
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = $"El PIN no coincide, favor validar nuevamente." });
+
+            //Asignar estado ENTREGADO y empleado al pedido
+            order.Estado = "ENTREGADO";
+
+            var resultEntity = await _orderRepository.UpdateOrder(order);
+
+            return new StandardResponse { IsSuccess = true, Message = "Entrega de pedido exitosa." };
         }
     }
 }

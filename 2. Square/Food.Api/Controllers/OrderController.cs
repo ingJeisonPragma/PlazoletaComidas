@@ -107,5 +107,33 @@ namespace Food.Api.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, response);
             }
         }
+
+        [HttpPut]
+        [Route("DeliverOrder")]
+        [Authorize(Roles = "3")]
+        public async Task<ActionResult> DeliverOrder(int Order, string Pin)
+        {
+            StandardResponse response = new();
+            try
+            {
+                var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                var infoUser = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadToken(Token);
+
+                int IdEmployee = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
+
+                response = await _orderServices.UpdateDeliveryOrder(IdEmployee, Order, Pin);
+                return StatusCode(201, response);
+            }
+            catch (DomainValidateException ex)
+            {
+                return StatusCode(400, ex.Standard);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = "Error inesperado al crear Plato: " + ex.Message;
+                return StatusCode(StatusCodes.Status400BadRequest, response);
+            }
+        }
     }
 }
