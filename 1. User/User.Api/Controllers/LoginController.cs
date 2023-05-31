@@ -14,6 +14,7 @@ namespace User.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class LoginController : ControllerBase
     {
         private readonly IUserServices _ownerServices;
@@ -26,13 +27,15 @@ namespace User.Api.Controllers
         }
 
         /// <summary>
-        /// CreateToken: Metodo que autentica el usuario y genera un token para permitir 
-        /// utilizar los otros metodos de las API que requieren autorizacion.
+        /// Metodo que autentica el usuario y genera un token para permitir 
+        /// utilizar los otros EndPoint de las API que requieren autorización.
         /// </summary>
         /// <param name="TokenRequest">Se compone del usuario y la contraseña del usuario.</param>
         /// <returns>TokenResponse</returns>
         [HttpPost]
         [Route("CreateToken")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> CreateToken([FromBody] TokenRequest model)
         {
             try

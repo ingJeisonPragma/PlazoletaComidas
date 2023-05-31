@@ -30,8 +30,18 @@ namespace User.Api.Controllers
             this._configuration = configuration;
         }
 
+        /// <summary>
+        /// Obtiene la información del los usuarios por su Id.
+        /// </summary>
+        ///// <remarks>Este es usado para obtener los datos del usuario sin la clave.</remarks>
+        /// <param name="Id">Id del usuario</param>
+        /// <returns>Objeto StandardResponse</returns>
+        /// <response code="200">Devuelve UserResponseDTO en el result del StandardResponse</response>
+        /// <response code="400">Devuelve StandardResponse con el error en el message</response>
         [HttpGet]
         [Route("GetUser")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         //[Authorize(Roles = "1")]
         public async Task<ActionResult<StandardResponse>> GetUser(int Id)
         {
@@ -53,6 +63,13 @@ namespace User.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Se encarga de crear los usuarios Propietarios usando el UserDTO
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>Objeto StandardResponse</returns>
+        /// <response code="200">Devuelve UserResponseDTO en el result del StandardResponse</response>
+        /// <response code="400">Devuelve StandardResponse con el error en el message</response>
         [HttpPost]
         [Route("AddOwner")]
         [Authorize(Roles = "1")]
