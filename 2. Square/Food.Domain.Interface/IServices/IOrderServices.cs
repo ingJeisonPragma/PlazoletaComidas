@@ -12,6 +12,7 @@ namespace Food.Domain.Interface.IServices
     {
         Task<StandardResponse> CreateOrder(OrderDTO order);
         Task<StandardResponse> GetPending(int IdEmployee, int page, int take);
+        Task<StandardResponse> GetPreparation(int IdEmployee, int page, int take);
         Task<StandardResponse> UpdateOrderOK(List<UpdateOrderDTO> orders, int IdEmployee);
         Task<StandardResponse> UpdatePreparationOrder(List<UpdateOrderDTO> orders, int IdEmployee);
         Task<StandardResponse> UpdateDeliveryOrder(int IdEmployee, int Order, string Pin);

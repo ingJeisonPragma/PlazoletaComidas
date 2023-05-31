@@ -9,6 +9,9 @@ using Microsoft.Net.Http.Headers;
 
 namespace Food.Api.Controllers
 {
+    /// <summary>
+    /// Controlador encargado de la Administración del Restaurante.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
@@ -25,11 +28,20 @@ namespace Food.Api.Controllers
             this._configuration = configuration;
         }
 
+        /// <summary>
+        /// Se encarga de listar todos los restaurantes con el número de paginas y la cantidad de registros.
+        /// </summary>
+        /// <param name="page">Indica el número de la pagina, por defecto es 1</param>
+        /// <param name="take">Indica el número de datos por pagina, por defecto es 10</param>
+        /// <returns></returns>
+        /// <response code="200">Devuelve StandardResponse en el param result del PaginatedListDTO con la lista de restaurantes</response>
+        /// <response code="400">Devuelve StandardResponse con el error en el message</response>
         [HttpGet]
         [Route("GetAll")]
-        //[Authorize(Roles = "1")]
-        [AllowAnonymous] 
-        public async Task<ActionResult<StandardResponse>> GetAll(int page, int take)
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
+        public async Task<ActionResult<StandardResponse>> GetAll(int page = 1, int take = 10)
         {
             StandardResponse response = new();
             try
@@ -73,9 +85,19 @@ namespace Food.Api.Controllers
 
         //}
 
+        /// <summary>
+        /// Es usado para crear los restaurantes de un Propietario.
+        /// Solo el usuario Admin puede realizar este proceso.
+        /// </summary>
+        /// <param name="restaurant">Usa el RestaurantDTO para realizar la petición.</param>
+        /// <returns></returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto </response>
+        /// <response code="400">Devuelve StandardResponse en el IsSuccess false y el error en el message</response>
         [HttpPost]
         [Route("AddRestaurant")]
         [Authorize(Roles = "1")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> AddRestaurant([FromBody] RestaurantDTO restaurant)
         {
             StandardResponse response = new();

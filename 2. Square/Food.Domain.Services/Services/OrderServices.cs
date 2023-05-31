@@ -72,6 +72,38 @@ namespace Food.Domain.Services.Services
                 return new StandardResponse { IsSuccess = false, Message = "No se tienen pedidos Pendientes en el restaurante." };
         }
 
+        public async Task<StandardResponse> GetPreparation(int IdEmployee, int page, int take)
+        {
+            //Validar el restaurante asociado al Empleado
+            var standard = await _restaurantEmployeeServices.GetRestaurantEmployee(IdEmployee);
+
+            var restautant = standard.Result.MapTo<RestaurantEmployeeDTO>();
+            if (restautant == null)
+                throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error al mapear el restaurante del empleado." });
+
+            //Buscar los ordenes con estados pendientes
+            var orderEntities = await _orderRepository.GetOrderState(restautant.IdRestaurante, "EN_PREPARACION", page, take);
+
+            var orderMap = orderEntities.MapTo<PaginatedListDTO<QueryOrderDTO>>();
+
+            //Cargar los platos en preparación
+            foreach (var item in orderMap.Items)
+            {
+                var orderdish = await _orderDishRepository.GetOrderDish(item.Id);
+                item.Dishes = new();
+                foreach (var itemDish in orderdish)
+                {
+                    var Dish = await _dishRepository.GetById(Convert.ToInt32(itemDish.IdPlato));
+                    item.Dishes.Add(DishMapper.MapDTO(Dish));
+                }
+            }
+
+            if (orderMap.Total > 0)
+                return new StandardResponse { IsSuccess = true, Message = "Lista de pedidos en estado Preparación.", Result = orderMap };
+            else
+                return new StandardResponse { IsSuccess = false, Message = "No se tienen pedidos en Preparación en el restaurante." };
+        }
+
         public async Task<StandardResponse> CreateOrder(OrderDTO order)
         {
             //Validar que el cliente no tenga más de un pedido creado en Estado (PENDIENTE, EN_PREPARACION, LISTO)
@@ -182,7 +214,6 @@ namespace Food.Domain.Services.Services
                 order.Pin = Pin;
 
                 await _orderRepository.UpdateOrder(order);
-
             }
 
             return new StandardResponse { IsSuccess = true, Message = "Notificación del pedido al cliente exitosa." };
@@ -214,8 +245,7 @@ namespace Food.Domain.Services.Services
 
             //Asignar estado ENTREGADO
             order.Estado = "ENTREGADO";
-
-            var resultEntity = await _orderRepository.UpdateOrder(order);
+            await _orderRepository.UpdateOrder(order);
 
             return new StandardResponse { IsSuccess = true, Message = "Entrega de pedido exitosa." };
         }

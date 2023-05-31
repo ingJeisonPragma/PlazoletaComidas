@@ -31,16 +31,23 @@ namespace Food.Api.Controllers
             this._configuration = configuration;
         }
 
+        /// <summary>
+        /// Se encarga de buscar los platos agrupados por categorias de acuerdo al Id del restaurante
+        /// </summary>
+        /// <param name="IdRestaurant">Id del restaurante al que pertencen los platos.</param>
+        /// <returns></returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto </response>
+        /// <response code="400">Devuelve StandardResponse en el IsSuccess false y el error en el message</response>
         [HttpGet]
         [Route("GetDishByCategory")]
-        //[Authorize(Roles = "1")]
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult<StandardResponse>> GetDishByCategory(int IdRestaurant)
         {
             StandardResponse response = new();
             try
             {
-
                 response = await _dishServices.GetDishByCategory(IdRestaurant);
                 return StatusCode(201, response);
             }
@@ -56,9 +63,19 @@ namespace Food.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Se encarga de crear los platos que van a estar relacionados a un Restaurante.
+        /// Solo los usuarios Propietarios tienen permiso para crearlo.
+        /// </summary>
+        /// <param name="dishDTO">Usa el DishDTO para la creación del Plato</param>
+        /// <returns></returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto </response>
+        /// <response code="400">Devuelve StandardResponse en el IsSuccess false y el error en el message</response>
         [HttpPost]
         [Route("AddDish")]
         [Authorize(Roles = "2")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> AddDish([FromBody] DishDTO dishDTO)
         {
             StandardResponse response = new();
@@ -85,15 +102,25 @@ namespace Food.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Se encarga de actualizar la descripción y el precio del plato por cada restaurante.
+        /// Solo los usuarios Propietarios tienen permiso para hacerlo.
+        /// </summary>
+        /// <param name="dishUpdateDTO">Usa el DishUpdateDTO para la actualización de descripción y precio.</param>
+        /// <returns></returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto </response>
+        /// <response code="400">Devuelve StandardResponse en el IsSuccess false y el error en el message</response>
         [HttpPut]
         [Route("UpdateDish")]
         [Authorize(Roles = "2")]
-        public async Task<ActionResult> UpdateDish([FromBody] DishUpdateDTO dishDTO)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
+        public async Task<ActionResult> UpdateDish([FromBody] DishUpdateDTO dishUpdateDTO)
         {
             StandardResponse response = new();
             try
             {
-                response = await _dishServices.UpdateDish(dishDTO);
+                response = await _dishServices.UpdateDish(dishUpdateDTO);
                 return StatusCode(201, response);
             }
             catch (DomainValidateException ex)
@@ -108,9 +135,18 @@ namespace Food.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Se encarga de Activar o Inactivar los platos en el restaurante.
+        /// </summary>
+        /// <param name="dishDTO">Usa el DishUpdateStateDTO para la actualización del plato, Id y Estado</param>
+        /// <returns></returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto </response>
+        /// <response code="400">Devuelve StandardResponse en el IsSuccess false y el error en el message</response>
         [HttpPut]
         [Route("UpdateDishState")]
         [Authorize(Roles = "2")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> UpdateDishState([FromBody] DishUpdateStateDTO dishDTO)
         {
             StandardResponse response = new();

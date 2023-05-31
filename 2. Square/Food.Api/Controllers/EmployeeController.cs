@@ -30,9 +30,19 @@ namespace Food.Api.Controllers
             this._employeeServices = employeeServices;
         }
 
+        /// <summary>
+        /// Se encarga de crear el empleado y su relación con el Restaurante del propietario.
+        /// Solo los usuarios Propietarios tienen permiso para hacer uso del EndPoint.
+        /// </summary>
+        /// <param name="user">Usa el UserDTO en la petición</param>
+        /// <returns>Objeto StandardResponse</returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto </response>
+        /// <response code="400">Devuelve StandardResponse en el IsSuccess false y el error en el message</response>
         [HttpPost]
         [Route("AddEmployee")]
         [Authorize(Roles = "2")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult<StandardResponse>> AddEmployee([FromBody] UserDTO user)
         {
             StandardResponse response = new();
