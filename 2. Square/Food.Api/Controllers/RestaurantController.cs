@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace Food.Api.Controllers
 {
@@ -15,10 +16,13 @@ namespace Food.Api.Controllers
     public class RestaurantController : ControllerBase
     {
         private readonly IRestaurantServices _restaurantServices;
+        private readonly IConfiguration _configuration;
 
-        public RestaurantController(IRestaurantServices restaurantServices)
+        public RestaurantController(IRestaurantServices restaurantServices,
+            IConfiguration configuration)
         {
             this._restaurantServices = restaurantServices;
+            this._configuration = configuration;
         }
 
         [HttpGet]
@@ -45,29 +49,29 @@ namespace Food.Api.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("GetRestaurantOwner")]
-        [Authorize(Roles = "2")]
-        public async Task<ActionResult> GetRestaurantOwner(int IdRestaurante, int IdPropietario)
-        {
-            StandardResponse response = new();
-            try
-            {
-                response = await _restaurantServices.GetValidateRestaurantOwner(IdRestaurante, IdPropietario);
-                return StatusCode(200, response);
-            }
-            catch (DomainValidateException ex)
-            {
-                return StatusCode(400, ex.Standard);
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                response.Message = "Error inesperado al validar la realación de restaurante y Propietario: " + ex.Message;
-                return StatusCode(StatusCodes.Status400BadRequest, response);
-            }
+        //[HttpGet]
+        //[Route("GetRestaurantOwner")]
+        //[Authorize(Roles = "2")]
+        //public async Task<ActionResult> GetRestaurantOwner(int IdRestaurante, int IdPropietario)
+        //{
+        //    StandardResponse response = new();
+        //    try
+        //    {
+        //        response = await _restaurantServices.GetValidateRestaurantOwner(IdRestaurante, IdPropietario);
+        //        return StatusCode(200, response);
+        //    }
+        //    catch (DomainValidateException ex)
+        //    {
+        //        return StatusCode(400, ex.Standard);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.IsSuccess = false;
+        //        response.Message = "Error inesperado al validar la realación de restaurante y Propietario: " + ex.Message;
+        //        return StatusCode(StatusCodes.Status400BadRequest, response);
+        //    }
 
-        }
+        //}
 
         [HttpPost]
         [Route("AddRestaurant")]
@@ -77,10 +81,13 @@ namespace Food.Api.Controllers
             StandardResponse response = new();
             try
             {
+                var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                _configuration["Tokens:AccessToken"] = Token;
+
                 response = await _restaurantServices.CreateRestaurant(restaurant);
                 return StatusCode(201, response);
             }
-            catch(DomainValidateException ex)
+            catch (DomainValidateException ex)
             {
                 return StatusCode(400, ex.Standard);
             }
@@ -90,7 +97,6 @@ namespace Food.Api.Controllers
                 response.Message = "Error inesperado al crear Restaurante: " + ex.Message;
                 return StatusCode(StatusCodes.Status400BadRequest, response);
             }
-            
         }
     }
 }

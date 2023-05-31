@@ -8,7 +8,6 @@ using Microsoft.Net.Http.Headers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using User.Domain.Business.DTO;
-using User.Domain.Business.DTO.FoodProxyDTO;
 using User.Domain.Interface.Exceptions;
 using User.Domain.Interface.IServices;
 
@@ -73,7 +72,7 @@ namespace User.Api.Controllers
         [HttpPost]
         [Route("AddOwner")]
         [Authorize(Roles = "1")]
-        public async Task<ActionResult<StandardResponse>> AddOwner([FromBody] UserOwnerDTO user)
+        public async Task<ActionResult<StandardResponse>> AddOwner([FromBody] UserDTO user)
         {
             StandardResponse response = new();
             try
@@ -96,7 +95,7 @@ namespace User.Api.Controllers
         [HttpPost]
         [Route("AddEmployee")]
         [Authorize(Roles = "2")]
-        public async Task<ActionResult<StandardResponse>> AddEmployee([FromBody] UserEmployeeDTO user)
+        public async Task<ActionResult<StandardResponse>> AddEmployee([FromBody] UserDTO user)
         {
             StandardResponse response = new();
             try
@@ -122,7 +121,7 @@ namespace User.Api.Controllers
         [HttpPost]
         [Route("AddCustomer")]
         [AllowAnonymous]
-        public async Task<ActionResult<StandardResponse>> AddCustomer([FromBody] UserCustomerDTO user)
+        public async Task<ActionResult<StandardResponse>> AddCustomer([FromBody] UserDTO user)
         {
             StandardResponse response = new();
             try

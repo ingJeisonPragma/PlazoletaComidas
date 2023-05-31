@@ -46,14 +46,14 @@ namespace User.DataBase.Repository
             return (await GetAll()).Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public async Task<UserEntity> GetOwnerDocument(int Document)
+        public async Task<UserEntity> GetDocument(int Document)
         {
             return (await GetAll()).Where(x => x.Documento == Document).FirstOrDefault();
         }
 
         public async Task<UserEntity> GetEmail(string Email)
         {
-            return (await GetAll()).Where(x => x.Correo == Email).FirstOrDefault();
+            return (await GetAll()).Where(x => x.Correo.ToLower() == Email.ToLower()).FirstOrDefault();
         }
 
         public Task<UserEntity> Update(UserEntity entity)

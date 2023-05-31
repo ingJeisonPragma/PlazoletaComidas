@@ -68,7 +68,7 @@ namespace Food.Api.Controllers
                 var infoUser = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadToken(Token);
                 _configuration["Tokens:AccessToken"] = Token;
 
-                int Propietario = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == ClaimTypes.Role).Value.ToString());
+                int Propietario = Convert.ToInt32(infoUser.Claims.First(claim => claim.Type == "IdUser").Value.ToString());
 
                 response = await _dishServices.CreateDish(dishDTO, Propietario);
                 return StatusCode(201, response);

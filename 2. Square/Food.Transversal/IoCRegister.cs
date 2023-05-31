@@ -41,6 +41,7 @@ namespace Food.Transversal
             services.AddTransient<IDishServices, DishServices>();
             services.AddTransient<IRestaurantEmployeeServices, RestaurantEmployeeServices>();
             services.AddTransient<IOrderServices, OrderServices>();
+            services.AddTransient<IEmployeeServices, EmployeeServices>();          
 
             //Api User
             services.AddTransient<IHttpPetitionServices, HttpPetitionServices>();

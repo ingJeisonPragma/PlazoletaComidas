@@ -1,11 +1,14 @@
 ﻿using Food.Domain.Business.DTO;
+using Food.Domain.Business.UserProxyDTO;
 using Food.Domain.Interface.IServices;
 using Food.Domain.Interface.IServices.IUserProxy;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,9 +42,20 @@ namespace Food.Domain.Services.Services.UserProxy
             return await _httpPetition.PetitionStandard(str);
         }
 
-        public Task<StandardResponse> PostAsync(StandardRequest request)
+        public async Task<StandardResponse> PostAsync(string MethodName, UserDTO userDTO)
         {
-            throw new NotImplementedException();
+            StandardRequest str = new()
+            {
+                RequestType = 2,
+                URL = _configuration["Apis:urlUser"],
+                ValueBody = userDTO,
+                MethodName = MethodName,
+                IsAuthorize = true,
+                Token = _configuration["Tokens:AccessToken"],
+                IsPragma = true,
+            };
+
+            return await _httpPetition.PetitionStandard(str);
         }
 
         public Task<StandardResponse> PutAsync(StandardRequest request)

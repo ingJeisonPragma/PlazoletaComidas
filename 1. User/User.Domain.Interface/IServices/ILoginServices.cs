@@ -10,6 +10,6 @@ namespace User.Domain.Interface.IServices
 {
     public interface ILoginServices
     {
-        TokenResponse CreateToken(UserOwnerDTO user);
+        TokenResponse CreateToken(UserResponseDTO user);
     }
 }

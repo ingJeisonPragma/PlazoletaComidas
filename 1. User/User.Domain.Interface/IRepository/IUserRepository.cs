@@ -11,7 +11,7 @@ namespace User.Domain.Interface.IRepository
     {
         Task<List<UserEntity>> GetAll();
         Task<UserEntity> GetById(int id);
-        Task<UserEntity> GetOwnerDocument(int Document);
+        Task<UserEntity> GetDocument(int Document);
         Task<UserEntity> GetEmail(string Email);
         Task<UserEntity> Add(UserEntity entity);
         Task<UserEntity> Update(UserEntity entity);

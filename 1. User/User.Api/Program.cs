@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
-using User.Domain.Business.DTO.FoodProxyDTO;
 using User.Transversal;
 
 var builder = WebApplication.CreateBuilder(args);

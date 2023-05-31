@@ -23,7 +23,7 @@ namespace User.Domain.Services.Services
             this._configuration = configuration;
         }
 
-        public TokenResponse CreateToken(UserOwnerDTO user)
+        public TokenResponse CreateToken(UserResponseDTO user)
         {
             var claims = new[]
             {
