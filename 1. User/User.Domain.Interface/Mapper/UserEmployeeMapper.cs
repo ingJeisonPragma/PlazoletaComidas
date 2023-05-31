@@ -12,43 +12,42 @@ namespace User.Domain.Interface.Mapper
 {
     public class UserEmployeeMapper
     {
-        public static UserEmployeeDTO MapDTO(UserEntity dto)
+        public static UserResponseDTO? MapDTO(UserEntity dto)
         {
-            var model = new UserEmployeeDTO();
             if (dto != null)
-                model = AttributesDTO(dto);
+                return AttributesDTO(dto);
             return null;
         }
-        public static List<UserEmployeeDTO> MapListDTO(List<UserEntity> entity)
+        public static List<UserResponseDTO> MapListDTO(List<UserEntity> entity)
         {
-            List<UserEmployeeDTO> users = new();
+            List<UserResponseDTO> users = new();
             if (entity.Count > 0)
                 foreach (UserEntity item in entity)
                     users.Add(AttributesDTO(item));
             return users;
         }
 
-        public static UserEntity MapEntity(UserEmployeeDTO dto)
+        public static UserEntity MapEntity(UserDTO dto)
         {
             var model = new UserEntity();
             if (dto != null)
                 model = AttributesEntity(dto);
             return model;
         }
-        public static List<UserEntity> MapListEntity(List<UserEmployeeDTO> entity)
+        public static List<UserEntity> MapListEntity(List<UserDTO> entity)
         {
             List<UserEntity> users = new();
             if (entity.Count > 0)
             {
-                foreach (UserEmployeeDTO item in entity)
+                foreach (UserDTO item in entity)
                     users.Add(AttributesEntity(item));
             }
             return users;
         }
 
-        private static UserEmployeeDTO AttributesDTO(UserEntity entity)
+        private static UserResponseDTO AttributesDTO(UserEntity entity)
         {
-            var dto = new UserEmployeeDTO()
+            var dto = new UserResponseDTO()
             {
                 Id = entity.Id,
                 Documento = entity.Documento,
@@ -56,13 +55,12 @@ namespace User.Domain.Interface.Mapper
                 Apellido = entity.Apellido,
                 Celular = entity.Celular,
                 Correo = entity.Correo,
-                Clave = entity.Clave,
+                //Clave = entity.Clave,
                 IdRol = entity.IdRol,
-                //NombreRol = entity.Rol.Nombre
             };
             return dto;
         }
-        private static UserEntity AttributesEntity(UserEmployeeDTO dto)
+        private static UserEntity AttributesEntity(UserDTO dto)
         {
             var user = new UserEntity()
             {

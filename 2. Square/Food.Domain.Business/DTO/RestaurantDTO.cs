@@ -38,9 +38,9 @@ namespace Food.Domain.Business.DTO
 
         [Display(Name = "Teléfono")]
         [Column(Order = 6)]
-        [Required(ErrorMessage = "El Teléfono es un campo obligatorio.")]
-        [MinLength(10, ErrorMessage = "La cantidad minima de caracteres es 10")]
-        [MaxLength(13, ErrorMessage = "El Teléfono excede los 13 caracteres permitidos")]
+        [Required(ErrorMessage = "El {0} es un campo obligatorio.")]
+        [MinLength(10, ErrorMessage = "La cantidad minima de caracteres es del {0} es {1}")]
+        [MaxLength(13, ErrorMessage = "El {0} excede los {1} caracteres permitidos")]
         [RegularExpression("^[+-]?\\d+(\\.\\d+)?$", ErrorMessage = "Ingresar un número de Teléfono válido")]
         public string Telefono { get; set; }
 

@@ -10,10 +10,10 @@ namespace User.Domain.Interface.IServices
 {
     public interface IUserServices
     {
-        Task<StandardResponse> CreateOwner(UserOwnerDTO user);
+        Task<StandardResponse> CreateOwner(UserDTO user);
         Task<StandardResponse> GetUser(int Id);
-        Task<UserOwnerDTO> GetValidateCredential(string user, string Pass);
-        Task<StandardResponse> CreateEmployee(UserEmployeeDTO user);
-        Task<StandardResponse> CreateCustomer(UserCustomerDTO user);
+        Task<UserResponseDTO?> GetValidateCredential(string user, string Pass);
+        Task<StandardResponse> CreateEmployee(UserDTO user);
+        Task<StandardResponse> CreateCustomer(UserDTO user);
     }
 }

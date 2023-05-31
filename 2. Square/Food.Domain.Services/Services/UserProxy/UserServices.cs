@@ -1,6 +1,7 @@
 ﻿using Food.Domain.Business.DTO;
 using Food.Domain.Business.UserProxyDTO;
 using Food.Domain.Interface.Exceptions;
+using Food.Domain.Interface.IServices;
 using Food.Domain.Interface.IServices.IUserProxy;
 using Newtonsoft.Json;
 using System;

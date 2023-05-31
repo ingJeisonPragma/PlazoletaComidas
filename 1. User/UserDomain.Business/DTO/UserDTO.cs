@@ -46,6 +46,8 @@ namespace User.Domain.Business.DTO
         [Display(Name = "Clave")]
         public string Clave { get; set; }
 
+        [Display(Name = "IdRol")]
+        [Range(1, int.MaxValue, ErrorMessage = "El {0} debe ser mayor a 0")]
         public int IdRol { get; set; }
     }
 }

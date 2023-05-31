@@ -10,38 +10,37 @@ using User.Domain.Business.DTO;
 using User.Domain.Interface.Exceptions;
 using User.Domain.Interface.IRepository;
 using User.Domain.Interface.IServices;
-using User.Domain.Interface.IServices.IFoodProxy;
 using User.Domain.Interface.Mapper;
-using User.Domain.Services.Services.FoodProxy;
 
 namespace User.Domain.Services.Services
 {
     public class UserServices : IUserServices
     {
         private readonly IUserRepository _userRepository;
-        private readonly IFoodServices _foodServices;
 
-        public UserServices(IUserRepository userRepository,
-            IFoodServices foodServices)
+        public UserServices(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            this._foodServices = foodServices;
         }
 
-        public async Task<StandardResponse> CreateOwner(UserOwnerDTO user)
+        public async Task<StandardResponse> CreateOwner(UserDTO user)
         {
-            var getOwner = await _userRepository.GetOwnerDocument(user.Documento);
+            var getOwner = await _userRepository.GetDocument(user.Documento);
 
             if (getOwner != null)
             {
-                if (user.IdRol == user.IdRol)
+                if (getOwner.IdRol == user.IdRol)
                     throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Propietario con este documento." });
-                if (getOwner.Correo.ToLower() == user.Correo.ToLower())
-                    throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Usuario con este correo." });
             }
 
+            //Validar si hay más usuarios con ese correo
+            var getUser = await _userRepository.GetEmail(user.Correo);
+
+            if (getUser != null)
+                throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Usuario con este correo." });
+
             user.IdRol = 2;
-            var userEntity = UserOwnerMapper.MapEntity(user);
+            var userEntity = UserEmployeeMapper.MapEntity(user);
             userEntity.Clave = Encript(userEntity.Clave);
             var result = await _userRepository.Add(userEntity);
 
@@ -51,27 +50,31 @@ namespace User.Domain.Services.Services
                 return new StandardResponse { IsSuccess = false, Message = "Error creando el Propietario." };
         }
 
-        public async Task<StandardResponse> CreateEmployee(UserEmployeeDTO user)
+        public async Task<StandardResponse> CreateEmployee(UserDTO user)
         {
-            var getEmployee = await _userRepository.GetOwnerDocument(user.Documento);
+            var getEmployee = await _userRepository.GetDocument(user.Documento);
 
             if (getEmployee != null)
             {
-                if (user.IdRol == user.IdRol)
+                if (getEmployee.IdRol == user.IdRol)
                     throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Empleado con este documento." });
-                if (getEmployee.Correo.ToLower() == user.Correo.ToLower())
-                    throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Usuario con este correo." });
             }
 
-            //Buscar restaurante y Empleado    
-            var resultValidateRestaurant = await _foodServices.ValidateRestaurantOwner(user.IdRestaurante, user.IdPropietario);
+            //Validar si hay más usuarios con ese correo
+            var getUser = await _userRepository.GetEmail(user.Correo);
 
-            if (!resultValidateRestaurant.IsSuccess)
-                throw new DomainUserValidateException(new StandardResponse()
-                {
-                    IsSuccess = false,
-                    Message = JsonConvert.DeserializeObject<StandardResponse>(resultValidateRestaurant.Result.ToString()).Message
-                });
+            if (getUser != null)
+                throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Usuario con este correo." });
+
+            //Buscar restaurante y Empleado    
+            //var resultValidateRestaurant = await _foodServices.ValidateRestaurantOwner(user.IdRestaurante, user.IdPropietario);
+
+            //if (!resultValidateRestaurant.IsSuccess)
+            //    throw new DomainUserValidateException(new StandardResponse()
+            //    {
+            //        IsSuccess = false,
+            //        Message = JsonConvert.DeserializeObject<StandardResponse>(resultValidateRestaurant.Result.ToString()).Message
+            //    });
 
             //Mappear y guardar el Empleado
             var userEntity = UserEmployeeMapper.MapEntity(user);
@@ -79,38 +82,43 @@ namespace User.Domain.Services.Services
             userEntity.Clave = Encript(userEntity.Clave);
             var result = await _userRepository.Add(userEntity);
 
-            //Agregar restaurante y Empleado    
-            var resultAddRestaurant = await _foodServices.CreateRestaurantOwner(user.IdRestaurante, result.Id);
+            var userMap = UserEmployeeMapper.MapDTO(result);
 
-            if (!resultAddRestaurant.IsSuccess)
-            {
-                await _userRepository.Delete(result);
-                throw new DomainUserValidateException(new StandardResponse
-                {
-                    IsSuccess = false,
-                    Message = "Error creando el Empleado: " +
-                    JsonConvert.DeserializeObject<StandardResponse>(resultAddRestaurant.Result.ToString()).Message
-                });
-            }
-            else
-                return new StandardResponse { IsSuccess = true, Message = "Se creo correctamente el Empleado." };
+            //Agregar restaurante y Empleado    
+            //var resultAddRestaurant = await _foodServices.CreateRestaurantOwner(user.IdRestaurante, result.Id);
+
+            //if (!resultAddRestaurant.IsSuccess)
+            //{
+            //    await _userRepository.Delete(result);
+            //    throw new DomainUserValidateException(new StandardResponse
+            //    {
+            //        IsSuccess = false,
+            //        Message = "Error creando el Empleado: " +
+            //        JsonConvert.DeserializeObject<StandardResponse>(resultAddRestaurant.Result.ToString()).Message
+            //    });
+            //}
+            //else
+            return new StandardResponse { IsSuccess = true, Message = "Se creo correctamente el Empleado.", Result = userMap };
         }
 
-        public async Task<StandardResponse> CreateCustomer(UserCustomerDTO user)
+        public async Task<StandardResponse> CreateCustomer(UserDTO user)
         {
-            var getEmployee = await _userRepository.GetOwnerDocument(user.Documento);
+            var getEmployee = await _userRepository.GetDocument(user.Documento);
 
             if (getEmployee != null)
             {
-                if (user.IdRol == user.IdRol)
+                if (getEmployee.IdRol == user.IdRol)
                     throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Cliente con este documento." });
-
-                if (getEmployee.Correo.ToLower() == user.Correo.ToLower())
-                    throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Usuario con este correo." });
             }
 
+            //Validar si hay más usuarios con ese correo
+            var getUser = await _userRepository.GetEmail(user.Correo);
+
+            if (getUser != null)
+                throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Ya existe un Usuario con este correo." });
+
             user.IdRol = 4;
-            var userEntity = UserCustomerMapper.MapEntity(user);
+            var userEntity = UserEmployeeMapper.MapEntity(user);
             userEntity.Clave = Encript(userEntity.Clave);
             var result = await _userRepository.Add(userEntity);
 
@@ -122,29 +130,29 @@ namespace User.Domain.Services.Services
 
         public async Task<StandardResponse> GetUser(int Id)
         {
-            var getOwner = await _userRepository.GetById(Id);
+            var getUser = await _userRepository.GetById(Id);
 
-            if (getOwner == null)
+            if (getUser == null)
                 throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "No existe el Usuario." });
 
-            var userDto = UserOwnerMapper.MapDTO(getOwner);
+            var userDto = UserEmployeeMapper.MapDTO(getUser);
 
             return new StandardResponse { IsSuccess = true, Message = "El Usuario existe.", Result = userDto };
         }
 
-        public async Task<UserOwnerDTO> GetValidateCredential(string user, string Pass)
+        public async Task<UserResponseDTO?> GetValidateCredential(string user, string Pass)
         {
             var getUser = await _userRepository.GetEmail(user);
 
             if (getUser != null)
             {
-                if (DesEncript(Pass, getUser.Clave))
+                if (!DesEncript(Pass, getUser.Clave))
                     throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Usuario o contraseña incorrectos." });
             }
             else
                 throw new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "Usuario o contraseña incorrectos." });
 
-            var userDto = UserOwnerMapper.MapDTO(getUser);
+            var userDto = UserEmployeeMapper.MapDTO(getUser);
 
             return userDto;
         }

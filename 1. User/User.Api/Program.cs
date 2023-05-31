@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using User.Domain.Business.DTO.FoodProxyDTO;
 using User.Transversal;
 
 var builder = WebApplication.CreateBuilder(args);
