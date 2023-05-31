@@ -32,7 +32,6 @@ namespace User.Api.Controllers
         /// <summary>
         /// Obtiene la información del los usuarios por su Id.
         /// </summary>
-        ///// <remarks>Este es usado para obtener los datos del usuario sin la clave.</remarks>
         /// <param name="Id">Id del usuario</param>
         /// <returns>Objeto StandardResponse</returns>
         /// <response code="200">Devuelve UserResponseDTO en el result del StandardResponse</response>
@@ -63,11 +62,12 @@ namespace User.Api.Controllers
         }
 
         /// <summary>
-        /// Se encarga de crear los usuarios Propietarios usando el UserDTO
+        /// Se encarga de crear los usuarios Propietarios usando el UserDTO.
+        /// Solo los usuarios Admin tienen permiso para crearlo.
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="user">Usa el UserDTO en la petición</param>
         /// <returns>Objeto StandardResponse</returns>
-        /// <response code="200">Devuelve UserResponseDTO en el result del StandardResponse</response>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto o false se hubo un error en el message</response>
         /// <response code="400">Devuelve StandardResponse con el error en el message</response>
         [HttpPost]
         [Route("AddOwner")]
@@ -92,6 +92,16 @@ namespace User.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Se encarga de crear los usuarios Empleado usando el UserDTO.
+        /// Solo los usuarios Propietarios tienen permiso para crearlo.
+        /// Es usado desde el Microservicio de Plazoleta para crear empleado y la relación con restaurante.
+        /// </summary>
+        /// <param name="user">Usa el UserDTO en la petición</param>
+        /// <returns>Objeto StandardResponse</returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto o false se hubo un error en el message
+        /// Incluye en el param result el UserResponseDTO con los datos del empleado creado sin la clave.</response>
+        /// <response code="400">Devuelve StandardResponse con el error en el message</response>
         [HttpPost]
         [Route("AddEmployee")]
         [Authorize(Roles = "2")]
@@ -118,6 +128,13 @@ namespace User.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Se encarga de crear los usuarios Empleado usando el UserDTO.
+        /// </summary>
+        /// <param name="user">Usa el UserDTO en la petición</param>
+        /// <returns>Objeto StandardResponse</returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto o false se hubo un error en el message</response>
+        /// <response code="400">Devuelve StandardResponse con el error en el message</response>
         [HttpPost]
         [Route("AddCustomer")]
         [AllowAnonymous]

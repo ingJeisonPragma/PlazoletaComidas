@@ -30,18 +30,20 @@ namespace User.Api.Controllers
         /// Metodo que autentica el usuario y genera un token para permitir 
         /// utilizar los otros EndPoint de las API que requieren autorización.
         /// </summary>
-        /// <param name="TokenRequest">Se compone del usuario y la contraseña del usuario.</param>
+        /// <param name="request">Se usa el ToKenRequest que se compone del correo y la contraseña del usuario.</param>
         /// <returns>TokenResponse</returns>
+        /// <response code="200">Devuelve StandardResponse en el IsSuccess true todo fue correcto o false se hubo un error en el message</response>
+        /// <response code="400">Devuelve StandardResponse con el error en el message</response>
         [HttpPost]
         [Route("CreateToken")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StandardResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
-        public async Task<ActionResult> CreateToken([FromBody] TokenRequest model)
+        public async Task<ActionResult> CreateToken([FromBody] TokenRequest request)
         {
             try
             {
                 //Valida usuario y contraseña
-                var user = await _ownerServices.GetValidateCredential(model.UserName, model.Password);
+                var user = await _ownerServices.GetValidateCredential(request.UserName, request.Password);
 
                 //Crear Token
                 var response = new StandardResponse()
