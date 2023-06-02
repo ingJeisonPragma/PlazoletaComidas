@@ -5,10 +5,10 @@ using Food.Domain.Interface.Entities;
 using Food.Domain.Interface.Exceptions;
 using Food.Domain.Interface.IRepository;
 using Food.Domain.Interface.IServices;
-using Food.Domain.Interface.IServices.ITwilioProxy;
+using Food.Domain.Interface.IServices.IMessengerProxy;
 using Food.Domain.Interface.IServices.IUserProxy;
 using Food.Domain.Interface.Mapper;
-using Food.Domain.Services.Services.TwilioProxy;
+using Food.Domain.Services.Services.MessengerProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +24,13 @@ namespace Food.Domain.Services.Services
         private readonly IDishRepository _dishRepository;
         private readonly IOrderDishRepository _orderDishRepository;
         private readonly IRestaurantEmployeeServices _restaurantEmployeeServices;
-        private readonly ITwilioServices _twilioServices;
+        private readonly IMessengerServices _twilioServices;
         private readonly IUserServices _userServices;
 
         public OrderServices(IOrderRepository orderRepository,
             IDishRepository dishRepository, IOrderDishRepository orderDishRepository,
             IRestaurantEmployeeServices restaurantEmployeeServices,
-            ITwilioServices twilioServices, IUserServices userServices)
+            IMessengerServices twilioServices, IUserServices userServices)
         {
             this._orderRepository = orderRepository;
             this._dishRepository = dishRepository;
@@ -207,7 +207,8 @@ namespace Food.Domain.Services.Services
                     throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error buscando los datos del cliente." });
 
                 //Enviar SMS al usuario
-                await _twilioServices.SendSMS(user.Celular, msg);
+                if(!await _twilioServices.SendSMS(user.Celular, msg))
+                    throw new DomainValidateException(new StandardResponse { IsSuccess = false, Message = "Error notificando al cliente el Pin del pedido." });
 
                 //Asignar estado LISTO y Pin de validación del pedido
                 order.Estado = "LISTO";

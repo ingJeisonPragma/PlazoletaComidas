@@ -8,8 +8,8 @@ using Food.Transversal.Proxy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Food.Domain.Services.Services.UserProxy;
-using Food.Domain.Interface.IServices.ITwilioProxy;
-using Food.Domain.Services.Services.TwilioProxy;
+using Food.Domain.Interface.IServices.IMessengerProxy;
+using Food.Domain.Services.Services.MessengerProxy;
 using Twilio.Clients;
 
 namespace Food.Transversal
@@ -47,9 +47,11 @@ namespace Food.Transversal
             services.AddTransient<IHttpPetitionServices, HttpPetitionServices>();
             services.AddTransient<IUserProxyServices, UserProxyServices>();
             services.AddTransient<IUserServices, UserServices>();
-            services.AddTransient<ITwilioServices, TwilioServices>();
-            //services.AddHttpClient<ITwilioRestClient, TwilioRestClient>();
 
+            //Api Messenger
+            services.AddTransient<IMessengerServices, MessengerServices>();
+            services.AddTransient<IMessengerProxyServices, MessengerProxyServices>();
+            
             return services;
         }
 

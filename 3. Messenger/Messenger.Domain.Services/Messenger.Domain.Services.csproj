@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Twilio" Version="6.6.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\1. User\UserDomain.Business\User.Domain.Business.csproj" />
+    <ProjectReference Include="..\Messenger.Domain.Business\Messenger.Domain.Business.csproj" />
   </ItemGroup>
 
 </Project>

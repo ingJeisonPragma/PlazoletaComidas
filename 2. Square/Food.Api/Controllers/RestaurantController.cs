@@ -34,7 +34,7 @@ namespace Food.Api.Controllers
         /// <param name="page">Indica el número de la pagina, por defecto es 1</param>
         /// <param name="take">Indica el número de datos por pagina, por defecto es 10</param>
         /// <returns></returns>
-        /// <response code="200">Devuelve StandardResponse en el param result del PaginatedListDTO con la lista de restaurantes</response>
+        /// <response code="200">Devuelve StandardResponse</response>
         /// <response code="400">Devuelve StandardResponse con el error en el message</response>
         [HttpGet]
         [Route("GetAll")]
@@ -56,7 +56,7 @@ namespace Food.Api.Controllers
             catch (Exception ex)
             {
                 response.IsSuccess = false;
-                response.Message = "Error inesperado al consultar los Restaurantes: " + ex.Message; ;
+                response.Message = "Error inesperado al consultar los Restaurantes: " + ex.Message;
                 return StatusCode(StatusCodes.Status400BadRequest, response);
             }
         }

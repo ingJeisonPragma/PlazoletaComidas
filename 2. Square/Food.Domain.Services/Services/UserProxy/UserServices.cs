@@ -56,7 +56,7 @@ namespace Food.Domain.Services.Services.UserProxy
 
             var response = await _userProxy.GetAsync("/api/User/GetUser", Header, Value);
 
-            return response; ;
+            return response;
         }
     }
 }

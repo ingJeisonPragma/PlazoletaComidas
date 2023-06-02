@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Food.Domain.Interface.IServices.ITwilioProxy
+namespace Food.Domain.Interface.IServices.IMessengerProxy
 {
-    public interface ITwilioServices
+    public interface IMessengerServices
     {
         Task<bool> SendSMS(string To, string msg);
     }

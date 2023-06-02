@@ -1,25 +1,24 @@
-﻿//using Food.Domain.Interface.IServices.ITwilioProxy;
-using Food.Domain.Interface.IServices.ITwilioProxy;
+﻿using Messenger.Domain.Business.DTO;
+using Messenger.Domain.Services.IServices;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using Twilio;
 using Twilio.Clients;
 using Twilio.Http;
 using Twilio.Rest.Api.V2010.Account;
 
-namespace Food.Domain.Services.Services.TwilioProxy
+namespace Messenger.Domain.Services.Services
 {
-    public class TwilioServices : ITwilioRestClient, ITwilioServices
+    public class MessengerServices : ITwilioRestClient, IMessengerServices
     {
         private readonly IConfiguration _configuration;
         private readonly ITwilioRestClient _innerClient;
 
-        public TwilioServices(IConfiguration configuration)
+        public MessengerServices(IConfiguration configuration)
         {
             this._configuration = configuration;
         }
@@ -30,16 +29,16 @@ namespace Food.Domain.Services.Services.TwilioProxy
         public string Region => _innerClient.Region;
         public Twilio.Http.HttpClient HttpClient => _innerClient.HttpClient;
 
-        public async Task<bool> SendSMS(string To, string msg)
+        public async Task<StandardResponse> SendSMS(TwilioRequestDTO requestDTO)
         {
             TwilioClient.Init(_configuration["Twilio:AccountSID"], _configuration["Twilio:AuthToken"]);
             var message = await MessageResource.CreateAsync(
-                to: new Twilio.Types.PhoneNumber(To),
-                from: new Twilio.Types.PhoneNumber("+13612648733"),
-                body: msg
+                to: new Twilio.Types.PhoneNumber(requestDTO.ToNumber),
+                from: new Twilio.Types.PhoneNumber(_configuration["Twilio:FromNumber"]),
+                body: requestDTO.msg
                 );
 
-            return true;
+            return new StandardResponse() { IsSuccess = true, Message = "SMS enviado con exito."};
         }
     }
 }
