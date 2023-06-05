@@ -15,13 +15,13 @@ using User.Domain.Services.Services;
 namespace User.UnitTest
 {
     [TestClass]
-    public class GerUserTest
+    public class GetUserTest
     {
         protected UserServices userServices;
         protected Mock<IUserRepository> MockUserRepository = new();
         protected Mock<IUserServices> MockUserServices = new();
 
-        public GerUserTest()
+        public GetUserTest()
         {
             this.userServices = new UserServices(this.MockUserRepository.Object);
         }
@@ -52,7 +52,7 @@ namespace User.UnitTest
             };
 
             var dato = this.MockUserRepository.Setup(x => x.GetById(It.IsAny<int>())).ReturnsAsync(userOwnerEntity);
-            var result = userServices.GetUser(3).Result;
+            var result = userServices.GetUser(1).Result;
             UserResponseDTO userResponse = new()
             {
                 Id = Id,
@@ -74,15 +74,33 @@ namespace User.UnitTest
         [TestMethod]
         public void GetUserException()
         {
-            this.MockUserRepository.Setup(x => x.GetById(It.IsAny<int>())).Throws(new DomainUserValidateException(new StandardResponse()));
+            int Id = 1;
+            int documento = 11456;
+            var nombre = "Jeison";
+            var apellido = "Cañas";
+            var celular = "3137653881";
+            var correo = "jeison@pragma.com.co";
+            var clave = "Acceso1";
+            var idRol = 1;
 
-            MockUserServices.Setup(u => u.GetUser(100)).Throws(new DomainUserValidateException(new StandardResponse()));
+            UserEntity userOwnerEntity = new()
+            {
+                Id = Id,
+                Documento = documento,
+                Nombre = nombre,
+                Apellido = apellido,
+                Celular = celular,
+                Correo = correo,
+                Clave = clave,
+                IdRol = idRol,
+                Rol = new RolEntity()
+            };
 
-            var result = userServices.GetUser(100).Result;
+            this.MockUserRepository.Setup(x => x.GetById(1)).ReturnsAsync(userOwnerEntity);
 
-            //Assert.IsNull(result);
-            //var Owner = (UserResponseDTO)result.Result;
-            MockUserRepository.Verify(m => m.GetById(100), Times.Once);
+            var result = userServices.GetUser(100);
+            var response = new DomainUserValidateException(new StandardResponse { IsSuccess = false, Message = "No existe el Usuario." });
+            Assert.ThrowsExceptionAsync<DomainUserValidateException>(async () => await result).Equals(response);
         }
     }
 }
