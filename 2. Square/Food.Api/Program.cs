@@ -15,8 +15,6 @@ builder.Services.AddControllers();
 
 IoCRegister.AddRegistration(builder.Services, builder.Configuration.GetConnectionString("cnxFood"));
 
-//builder.Services.AddHttpClient<ITwilioRestClient, TwilioServices>();
-
 //Inyeccion de dependencias del token JWT.
 builder.Services.AddAuthentication(options =>
 {
