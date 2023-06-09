@@ -6,6 +6,9 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(Nowarn);1591</NoWarn>
+		<UserSecretsId>4f27a5d6-1204-4d4f-a978-8c2df4d7755a</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -15,13 +18,12 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\2. Square\Food.Domain.Business\Food.Domain.Business.csproj" />
-		<ProjectReference Include="..\..\2. Square\Food.Domain.Interface\Food.Domain.Interface.csproj" />
 		<ProjectReference Include="..\User.Transversal\User.Transversal.csproj" />
 		<ProjectReference Include="..\UserDomain.Business\User.Domain.Business.csproj" />
 	</ItemGroup>
