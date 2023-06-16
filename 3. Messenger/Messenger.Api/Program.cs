@@ -38,7 +38,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api Mensajería", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api Mensajeria", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
@@ -73,7 +73,7 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api Mesajería.");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api Mesajeria.");
     });
 //}
 

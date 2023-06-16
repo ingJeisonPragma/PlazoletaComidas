@@ -68,5 +68,17 @@ namespace User.Api.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, response);
             }
         }
+
+        /// <summary>
+        /// Metodo de validación del Elastic.
+        /// </summary>
+        /// <returns></returns>
+        /// /// <response code="200">Devuelve siempre este estado</response>
+        [HttpGet]
+        [Route("HealthCheck")]
+        public async Task<ActionResult> HealthCheck()
+        {
+            return Ok();
+        }
     }
 }

@@ -22,7 +22,20 @@ namespace Messenger.Api.Controllers
         }
 
         /// <summary>
-        /// S encarga del envió de mensajes de texto
+        /// Metodo de validación del Elastic.
+        /// </summary>
+        /// <returns></returns>
+        /// /// <response code="200">Devuelve siempre este estado</response>
+        [HttpGet]
+        [Route("HealthCheck")]
+        [AllowAnonymous]
+        public async Task<ActionResult> HealthCheck()
+        {
+            return Ok();
+        }
+
+        /// <summary>
+        /// Se encarga del envió de mensajes de texto
         /// </summary>
         /// <param name="twilioRequest">Usa el modelo TwilioRequestDTO que recibe el número del recpetor y el mensaje a enviar.</param>
         /// <returns></returns>

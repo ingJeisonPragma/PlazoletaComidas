@@ -31,6 +31,19 @@ namespace Food.Api.Controllers
         }
 
         /// <summary>
+        /// Metodo de validación del Elastic.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Devuelve siempre este estado</response>
+        [HttpGet]
+        [Route("HealthCheck")]
+        [AllowAnonymous]
+        public async Task<ActionResult> HealthCheck()
+        {
+            return Ok();
+        }
+
+        /// <summary>
         /// Se encarga de crear el empleado y su relación con el Restaurante del propietario.
         /// Solo los usuarios Propietarios tienen permiso para hacer uso del EndPoint.
         /// </summary>
