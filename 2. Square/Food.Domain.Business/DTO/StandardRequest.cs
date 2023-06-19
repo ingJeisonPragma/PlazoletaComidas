@@ -25,32 +25,32 @@ namespace Food.Domain.Business.DTO
         /// (Requerido) Extension Api con el metodo a ejecutar.
         /// </summary>
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
-        public string MethodName { get; set; }
+        public string MethodName { get; set; } = string.Empty;
 
         /// <summary>
         /// Lista de parametros para el RequestType GET
         /// </summary>
-        public List<dynamic> HeaderParameters { get; set; }
+        public List<dynamic> HeaderParameters { get; set; } = new();
 
         /// <summary>
         /// Lista de valores de parametros para el RequestType GET.
         /// </summary>
-        public List<dynamic> ValuesParameters { get; set; }
+        public List<dynamic> ValuesParameters { get; set; } = new();
 
         /// <summary>
         /// Tipo de data ("Json", "x-www-form-urlencoded", "none")
         /// </summary>
-        public string TypeBody { get; set; }
+        public string TypeBody { get; set; } = string.Empty;
 
         /// <summary>
         /// Cuerpo de la petición.
         /// </summary>
-        public object ValueBody { get; set; }
+        public object ValueBody { get; set; } = new();
 
         /// <summary>
         /// El Controller requiere Authorize Scheme ("Bearer", "Basic")
         /// </summary>
-        public string TypeAuthorize { get; set; }
+        public string TypeAuthorize { get; set; } = string.Empty;
 
         /// <summary>
         /// Enviar True si el Controller requiere Authorize
@@ -60,7 +60,7 @@ namespace Food.Domain.Business.DTO
         /// <summary>
         /// Código de acceso cuando se requiere un token de acceso.
         /// </summary>
-        public string Token { get; set; }
+        public string Token { get; set; } = string.Empty;
 
         /// <summary>
         /// Código de acceso cuando se requiere un token de acceso.
@@ -75,11 +75,11 @@ namespace Food.Domain.Business.DTO
         /// <summary>
         /// Lista de Keys para el Header del Request
         /// </summary>
-        public List<dynamic> RequestHeader { get; set; }
+        public List<dynamic> RequestHeader { get; set; } = new();
 
         /// <summary>
         /// Lista de valores para el Header del Request
         /// </summary>
-        public List<dynamic> RequestValues { get; set; }
+        public List<dynamic> RequestValues { get; set; } = new();
     }
 }
