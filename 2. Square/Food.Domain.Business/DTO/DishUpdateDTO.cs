@@ -14,7 +14,7 @@ namespace Food.Domain.Business.DTO
 
         [Required(ErrorMessage = "La Descripción es un campo obligatorio.")]
         [MaxLength(500, ErrorMessage = "La Descripción excede los 500 caracteres permitidos.")]
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
 
         [Required]
         [Range(1, int.MaxValue)]

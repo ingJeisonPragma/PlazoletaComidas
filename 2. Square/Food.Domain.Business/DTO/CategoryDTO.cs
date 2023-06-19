@@ -14,11 +14,11 @@ namespace Food.Domain.Business.DTO
         public int Id { get; set; }
 
         [Column(Order = 2)]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [Column(Order = 3)]
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
 
-        public virtual List<DishCategoryDTO> Dishes { get; set; }
+        public virtual List<DishCategoryDTO> Dishes { get; set; } = new();
     }
 }

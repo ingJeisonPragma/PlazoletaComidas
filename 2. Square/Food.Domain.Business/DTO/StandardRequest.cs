@@ -19,7 +19,7 @@ namespace Food.Domain.Business.DTO
         /// (Requerido) Url para realizar la petición.
         /// </summary>
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
-        public string URL { get; set; }
+        public string URL { get; set; } = string.Empty;
 
         /// <summary>
         /// (Requerido) Extension Api con el metodo a ejecutar.

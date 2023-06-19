@@ -14,10 +14,10 @@ namespace Food.Domain.Business.DTO
         public int Id { get; set; }
 
         [Display(Name = "Nombre")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [Display(Name = "urlLogo")]
-        public string urlLogo { get; set; }
+        public string UrlLogo { get; set; } = string.Empty;
 
     }
 }

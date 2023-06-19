@@ -52,7 +52,7 @@ namespace Food.Domain.Interface.Mapper
                 Precio = Convert.ToInt32(entity.Precio),
                 IdCategoria = entity.IdCategoria,
                 IdRestaurant = entity.IdRestaurant,
-                urlImagen = entity.urlImagen,
+                UrlImagen = entity.urlImagen,
                 Activo = entity.Activo
             };
             return dto;
@@ -68,7 +68,7 @@ namespace Food.Domain.Interface.Mapper
                 Precio = dto.Precio,
                 IdCategoria = dto.IdCategoria,
                 IdRestaurant = dto.IdRestaurant,
-                urlImagen = dto.urlImagen,
+                urlImagen = dto.UrlImagen,
                 Activo = dto.Activo
             };
             return Dish;
@@ -93,7 +93,7 @@ namespace Food.Domain.Interface.Mapper
                 Descripcion = entity.Descripcion,
                 Precio = Convert.ToInt32(entity.Precio),
                 IdRestaurant = entity.IdRestaurant,
-                urlImagen = entity.urlImagen,
+                UrlImagen = entity.urlImagen,
             };
             return dto;
         }

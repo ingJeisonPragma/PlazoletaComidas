@@ -20,12 +20,14 @@ namespace Food.Api.Controllers
     {
         private readonly IOrderServices _orderServices;
         private readonly IConfiguration _configuration;
+        private StandardResponse response;
 
         public OrderController(IOrderServices orderServices,
             IConfiguration configuration)
         {
-            this._orderServices = orderServices;
-            this._configuration = configuration;
+            _orderServices = orderServices;
+            _configuration = configuration;
+            response = new();
         }
 
         /// <summary>
@@ -44,7 +46,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> GetOrderPending(int page = 1, int take = 10)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -83,7 +84,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> GetOrderPreparation(int page = 1, int take = 10)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -121,7 +121,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> AddOrder([FromBody] OrderDTO orderDTO)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -159,7 +158,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> AssingOrderEmployee([FromBody] List<UpdateOrderDTO> updateOrders)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -197,7 +195,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> NotificationSMS([FromBody] List<UpdateOrderDTO> updateOrders)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -237,7 +234,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> DeliverOrder(int Order, string Pin)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -275,7 +271,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> CancelOrder(int Order)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");

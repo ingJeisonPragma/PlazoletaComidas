@@ -29,7 +29,7 @@ namespace Food.Domain.Business.DTO.Order
 
         [MaxLength(20)]
         [Display(Name = "Estado")]
-        public string Estado { get; set; }
+        public string Estado { get; set; } = string.Empty;
 
         public int? IdChef { get; set; } = 0;
 

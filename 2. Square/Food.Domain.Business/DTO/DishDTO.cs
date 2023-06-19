@@ -16,7 +16,7 @@ namespace Food.Domain.Business.DTO
         [MaxLength(100, ErrorMessage = "El Nombre excede los 100 caracteres permitidos.")]
         [Display(Name = "Nombre")]
         [CustomValidation(typeof(NameValidation), "NameValidate")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La Categoria es un campo obligatorio.")]
         [Display(Name = "Categoria")]
@@ -24,7 +24,7 @@ namespace Food.Domain.Business.DTO
 
         [Required(ErrorMessage = "La Descripción es un campo obligatorio.")]
         [MaxLength(500, ErrorMessage = "La Descripción excede los 500 caracteres permitidos.")]
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El {0} es un campo obligatorio")]
         [Range(1, int.MaxValue, ErrorMessage = "El {0} debe ser mayor a 0.")]
@@ -37,7 +37,7 @@ namespace Food.Domain.Business.DTO
         [Required(ErrorMessage = "La Url de la imagen en un campo obligatorio.")]
         [MaxLength(1000, ErrorMessage = "La Url excede los 1000 caracteres permitidos.")]
         [Display(Name = "Imagen")]
-        public string urlImagen { get; set; }
+        public string UrlImagen { get; set; } = string.Empty;
         public bool Activo { get; set; }
     }
 }
