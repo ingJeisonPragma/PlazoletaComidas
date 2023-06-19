@@ -23,12 +23,14 @@ namespace Food.Api.Controllers
     {
         private readonly IDishServices _dishServices;
         private readonly IConfiguration _configuration;
+        private StandardResponse response;
 
         public DishController(IDishServices dishServices,
             IConfiguration configuration)
         {
-            this._dishServices = dishServices;
-            this._configuration = configuration;
+            _dishServices = dishServices;
+            _configuration = configuration;
+            response = new();
         }
 
         /// <summary>
@@ -45,7 +47,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult<StandardResponse>> GetDishByCategory(int IdRestaurant)
         {
-            StandardResponse response = new();
             try
             {
                 response = await _dishServices.GetDishByCategory(IdRestaurant);
@@ -78,7 +79,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> AddDish([FromBody] DishDTO dishDTO)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -117,7 +117,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> UpdateDish([FromBody] DishUpdateDTO dishUpdateDTO)
         {
-            StandardResponse response = new();
             try
             {
                 response = await _dishServices.UpdateDish(dishUpdateDTO);
@@ -149,7 +148,6 @@ namespace Food.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StandardResponse))]
         public async Task<ActionResult> UpdateDishState([FromBody] DishUpdateStateDTO dishDTO)
         {
-            StandardResponse response = new();
             try
             {
                 var Token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
