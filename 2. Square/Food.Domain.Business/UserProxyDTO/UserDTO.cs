@@ -20,31 +20,31 @@ namespace Food.Domain.Business.UserProxyDTO
         [Required(ErrorMessage = "El Nombre es un campo obligatorio.")]
         [MaxLength(50, ErrorMessage = "El Nombre excede los 50 caracteres permitidos.")]
         [Display(Name = "Nombre")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El Apellido es un campo obligatorio.")]
         [MaxLength(50, ErrorMessage = "El Apellido excede los 50 caracteres permitidos.")]
         [Display(Name = "Apellido")]
-        public string Apellido { get; set; }
+        public string Apellido { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El Celular es un campo obligatorio.")]
         [MinLength(13, ErrorMessage = "La cantidad minima de caracteres del {0} es {1}.")]
         [MaxLength(13, ErrorMessage = "El {0} excede los {1} caracteres permitidos.")]
         [Display(Name = "Celular")]
         [RegularExpression("^[+-]?\\d+(\\.\\d+)?$", ErrorMessage = "Ingresar un número de Celular válido.")]
-        public string Celular { get; set; }
+        public string Celular { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El Correo es un campo obligatorio.")]
         [MaxLength(100, ErrorMessage = "El Correo excede los 100 caracteres permitidos")]
         [Display(Name = "Correo")]
         [DataType(DataType.EmailAddress)]
         [RegularExpression("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", ErrorMessage = "Ingresar un correo válido.")]
-        public string Correo { get; set; }
+        public string Correo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La Clave es un campo obligatorio.")]
         [MaxLength(20)]
         [Display(Name = "Clave")]
-        public string Clave { get; set; }
+        public string Clave { get; set; } = string.Empty;
 
         [Display(Name = "IdRol")]
         [Range(1, int.MaxValue, ErrorMessage = "El {0} debe ser mayor a 0")]

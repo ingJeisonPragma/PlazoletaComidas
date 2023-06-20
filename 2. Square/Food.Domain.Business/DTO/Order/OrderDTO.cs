@@ -37,6 +37,6 @@ namespace Food.Domain.Business.DTO.Order
         public int IdRestaurante { get; set; }
 
         [Required(ErrorMessage = "La lista de platos es necesaria para crear el pedido.")]
-        public List<WriteOrderDishDTO> orderDishes { get; set; }
+        public List<WriteOrderDishDTO>? orderDishes { get; set; }
     }
 }
