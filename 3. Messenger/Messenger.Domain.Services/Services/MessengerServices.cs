@@ -1,4 +1,5 @@
 ﻿using Messenger.Domain.Business.DTO;
+using Messenger.Domain.Services.Exceptions;
 using Messenger.Domain.Services.IServices;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -31,12 +32,19 @@ namespace Messenger.Domain.Services.Services
 
         public async Task<StandardResponse> SendSMS(TwilioRequestDTO requestDTO)
         {
-            TwilioClient.Init(_configuration["Twilio:AccountSID"], _configuration["Twilio:AuthToken"]);
-            var message = await MessageResource.CreateAsync(
-                to: new Twilio.Types.PhoneNumber(requestDTO.ToNumber),
-                from: new Twilio.Types.PhoneNumber(_configuration["Twilio:FromNumber"]),
-                body: requestDTO.msg
-                );
+            try
+            {
+                TwilioClient.Init(_configuration["Twilio:AccountSID"], _configuration["Twilio:AuthToken"]);
+                var message = await MessageResource.CreateAsync(
+                    to: new Twilio.Types.PhoneNumber(requestDTO.ToNumber),
+                    from: new Twilio.Types.PhoneNumber(_configuration["Twilio:FromNumber"]),
+                    body: requestDTO.msg
+                    );
+            }
+            catch
+            {
+                throw new SmsException(new StandardResponse { IsSuccess = false, Message = "Error enviando el mensaje."});
+            }
 
             return new StandardResponse() { IsSuccess = true, Message = "SMS enviado con exito."};
         }
