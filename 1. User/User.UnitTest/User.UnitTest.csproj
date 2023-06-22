@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\User.DataBase\User.DataBase.csproj" />
     <ProjectReference Include="..\User.Domain.Services\User.Domain.Services.csproj" />
   </ItemGroup>
 

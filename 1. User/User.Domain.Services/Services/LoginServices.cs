@@ -35,7 +35,7 @@ namespace User.Domain.Services.Services
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            //TODO: Se deja el Token habilitado por 1 día
+            //TODO: Se deja el Token habilitado por 12 horas
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
